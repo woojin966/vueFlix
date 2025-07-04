@@ -1,7 +1,7 @@
 <template>
     <article class="header_wrap">
         <div class="logo_box">
-            <a href="javascript:void(0)">VUEFLIX</a>
+            <a href="javascript:void(0)" class="big bb">VUEFLIX</a>
         </div>
         <div>
             <div class="searchbar_box">
@@ -14,16 +14,16 @@
                 <button @click="toggleAlarm" type="button" class="alarm_btn">
                     <font-awesome-icon :icon="['far', 'bell']" />
                 </button>
-                <div v-if="showAlarm" class="alarm_box">
+                <div v-if="showAlarm" class="alarm_box popup">
                     <ul>
-                        <li v-if="notifications.length === 0">알림이 없습니다.</li>
+                        <li v-if="notifications.length === 0" class="no_alarm">알림이 없습니다.</li>
                         <li v-else v-for="(notice, index) in notifications" :key="index">{{ notice }}</li>
                     </ul>
                 </div>
                 <button @click="toggleProfile" type="button" class="profile_btn">
                     <font-awesome-icon :icon="['far', 'user']" />
                 </button>
-                <div v-if="showProfile" class="alarm_box">
+                <div v-if="showProfile" class="profile_box popup">
                     <ul>
                         <li>
                             <a href="javascript:void(0)">프로필 관리</a>
@@ -35,7 +35,7 @@
                             <a href="javascript:void(0)">고객센터</a>
                         </li>
                     </ul>
-                    <button type="button">로그아웃</button>
+                    <button type="button" class="logout_btn">로그아웃</button>
                 </div>
             </div>
         </div>
@@ -69,3 +69,7 @@
         showAlarm.value = false
     }
 </script>
+
+<style scoped lang="scss">
+@import '../assets/header.scss';
+</style>
