@@ -1,1 +1,16 @@
 @import 'reset.css';
+@import '_variable.scss';
+
+// font
+.big{font-size: 20px;}
+.medium{font-size: 18px;}
+.text{font-size: 16px;}
+.small{font-size: 12px;}
+.mini{font-size: 10px;}
+.bb{font-weight: bolder;}
+.b{font-weight: bold;}
+.sb{font-weight: 600;}
+.mb{font-weight: 500;}
+.n{font-weight: 400;}
+
+.body_wrap{font-family: $mainFont; line-height: 1.4;}
