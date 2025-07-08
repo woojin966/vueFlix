@@ -1,28 +1,22 @@
 <template>
   <div class="body_wrap">
-    <Header></Header>
-    <MoveList></MoveList>
+    <!-- $event : Header.vue에서 @update:keyword="$emit('update:keyword', $event)"로 보낸 값 - 입력한 키워드,을 keyword에 할당 -->
+    <Header @update:keyword="keyword = $event"></Header>
+    <!-- Header에서 받아 할당한 keyword를 MoveList로 props보냄 -->
+    <MoveList :keyword="keyword"></MoveList>
     <Footer></Footer>
   </div>
 </template>
 
 <script setup>
+  import { ref } from 'vue'
   import Header from './components/Header.vue'
   import MoveList from './components/MoveList.vue'
   import Footer from './components/Footer.vue'
+
+  const keyword = ref('')
 </script>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>

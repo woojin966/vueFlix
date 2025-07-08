@@ -1,14 +1,18 @@
 <template>
-    <article class="header_wrap">
-        <div class="logo_box">
+    <article class="header_article">
+        <section class="logo_section">
             <a href="javascript:void(0)" class="big bb">VUEFLIX</a>
-        </div>
-        <div>
+        </section>
+        <section class="searchbar_btn_section">
             <div class="searchbar_box">
-                <button @click="toggleSearch" type="button" class="search_btn">
+                <!-- $event : SearchBar.vue에서 emit('update:keyword', keyword.value)로 보낸 값 - 입력한 키워드 -->
+                <SearchBar v-if="showSearch" @close="showSearch = false" @update:keyword="$emit('update:keyword', $event)"></SearchBar>
+                <button v-if="showSearch" @click="showSearch=false" class="search_close_btn">
+                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                </button>
+                <button v-else @click="showSearch=true" type="button" class="search_btn">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                 </button>
-                <SearchBar v-if="showSearch" @close="showSearch = false"></SearchBar>
             </div>
             <div class="header_btn_box">
                 <button @click="toggleAlarm" type="button" class="alarm_btn">
@@ -38,7 +42,7 @@
                     <button type="button" class="logout_btn">로그아웃</button>
                 </div>
             </div>
-        </div>
+        </section>
     </article>
 </template>
 
@@ -49,10 +53,6 @@
     // 검색바 보이기
     // ref() : 반응현 변수 -> 값이 바뀌면 dom도 자동으로 바뀌게 함
     const showSearch = ref(false)
-    const toggleSearch = () => {
-        // toggleSearch 호출시 showSearch.value 값을 반대로 바꿈 : true or false
-        showSearch.value = !showSearch.value
-    }
 
     // 알람박스 보이기
     const showAlarm = ref(false)
@@ -68,6 +68,9 @@
         showProfile.value = !showProfile.value
         showAlarm.value = false
     }
+
+    // app.vue로 검색 키워드 보내기
+    const emit = defineEmits(['update:keyword'])
 </script>
 
 <style scoped lang="scss">
