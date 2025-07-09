@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@vitejs/plugin-vue": "^6.0.0",
+    "axios": "^1.10.0",
     "hangul-js": "^0.2.6"
   },
   "devDependencies": {
