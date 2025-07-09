@@ -1,72 +1,69 @@
 <template>
-    <ul>
-        <MovieItem 
-            v-for="movie in filterMovies" 
-            :key="movie.id" 
-            :movie="movie"
-        ></MovieItem>
-    </ul>
+    <article class="movie_article">
+        <MovieSection
+            title="인기 영화"
+            endpoint="/movie/popular"
+            :genreMap="genreMap"
+        />
+        <MovieSection 
+            title="현재 상영 중" 
+            endpoint="/movie/now_playing" 
+            :genreMap="genreMap"
+        />
+        <MovieSection 
+            title="상영 예정" 
+            endpoint="/movie/upcoming" 
+            :genreMap="genreMap"
+        />
+        <MovieSection 
+            title="평점 높은 영화" 
+            endpoint="/movie/top_rated"  
+            :genreMap="genreMap"
+        />
+        <!-- 무한 스크롤로 추가되는 장르 섹션 -->
+        <MovieSection 
+            v-for="section in genreSections"
+            :key="section.id"
+            :title="section.name"
+            :endpoint="section.endpoint"
+            :genreMap="genreMap"
+        />
+    </article>
 </template>
 
 <script setup>
-    import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-    import axios from 'axios'
-    import Hangul from 'hangul-js'
-    import MovieItem from './MovieItem.vue'
-    
-    const props = defineProps(['keyword'])
-    let page = ref(1)
-    const isFetching = ref(false)
-    const movies = ref([])
+    import { ref, onMounted, onBeforeUnmount } from 'vue'
+    import MovieSection from './MovieSection.vue'
+    import { genreMap, genreList } from '../data/genres'
 
-    const fetchMovies = async () => {
-        if (isFetching.value) return
-        isFetching.value = true
+    const loadedGenreIndex = ref(0)
+    const genreSections = ref([])
 
-        try{
-            const movieRes  = await axios.get('https://api.themoviedb.org/3/discover/movie', {
-                params: {
-                    api_key: 'fcc17cdaa94f35e5e1cf80b2de9ea4e7',
-                    language: 'ko-KR',
-                    sort_by: 'popularity.desc',
-                    page: page.value
-                }
-            })
-            movies.value.push(...movieRes.data.results)
-        } finally {
-            isFetching.value = false
+    const loadNextGenre = () => {
+  if (loadedGenreIndex.value >= genreList.length) return
+  const genre = genreList[loadedGenreIndex.value]
+  genreSections.value.push({
+    id: genre.id,
+    name: genre.name,
+    endpoint: `/discover/movie?with_genres=${genre.id}`,
+  })
+  loadedGenreIndex.value++
+}
+
+    const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            loadNextGenre()
         }
     }
+
+    onMounted(() => {
+        // 처음 한 섹션은 미리 로딩
+        loadNextGenre()
+        window.addEventListener('scroll', handleScroll) 
+    })
 
     onBeforeUnmount(() => {
         window.removeEventListener('scroll', handleScroll)
-    })
-
-    onMounted(() => {
-        fetchMovies()
-        window.addEventListener('scroll', handleScroll)
-    })
-
-    const handleScroll = () => {
-        const scrollHeight = document.documentElement.scrollHeight
-        const scrollTop = document.documentElement.scrollTop
-        const clientHeight = document.documentElement.clientHeight
-
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            page.value++
-            fetchMovies()
-        }
-    }
-
-    const filterMovies = computed(() => {
-        return movies.value.filter((movie) => {
-            const title = movie.title || ''
-            const dis = Hangul.disassemble(title).join('')
-            const search = Hangul.disassemble(props.keyword).join('')
-            return (
-                title.toLowerCase().includes(props.keyword.toLowerCase()) ||
-                dis.includes(search)
-            )
-        })
     })
 </script>

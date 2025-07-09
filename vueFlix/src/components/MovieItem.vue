@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-    import { genreMap } from '../data/genres'
+    // import { genreMap } from '../data/genres'
 
     const props = defineProps({ movie: Object, genres: Object })
 
@@ -19,8 +19,8 @@
     : '정보 없음'
 
     const genreNames = props.movie.genre_ids
-  ? props.movie.genre_ids.map(id => genreMap[id] || '기타')
-  : []
+    ? props.movie.genre_ids.map(id => props.genres[id] || '기타')
+    : []
 </script>
 
 <style scoped lang="scss">
