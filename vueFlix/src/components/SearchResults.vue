@@ -5,6 +5,7 @@
         v-for="movie in movies"
         :key="movie.id"
         :movie="movie"
+        :genres="genreMap"
       />
     </ul>
     <p v-else>검색 결과가 없습니다.</p>
@@ -15,6 +16,7 @@
     import { ref, onMounted, watch } from 'vue'
     import axios from 'axios'
     import MovieItem from './MovieItem.vue'
+    import { genreMap } from '../data/genres'
 
     const props = defineProps({
         keyword: String
