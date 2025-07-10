@@ -6,13 +6,14 @@
             :navigation="navigationOptions"
             :breakpoints="swiperBreakpoints"
             class="movie-swiper"
-            :class="{ 'highlight-popular': props.endpoint === '/movie/popular' }"
             ref="swiperRef"
         >
-            <SwiperSlide v-for="movie in movies.slice(0, limit)" :key="movie.id">
+            <SwiperSlide v-for="(movie, index) in movies.slice(0, limit)" :key="movie.id">
                 <MovieItem
                     :movie="movie"
                     :genres="genreMap"
+                    :index="index"
+                    :endpoint="props.endpoint"
                 ></MovieItem>
             </SwiperSlide>
         </Swiper >
