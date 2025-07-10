@@ -4,6 +4,8 @@
             title="인기 영화"
             endpoint="/movie/popular"
             :genreMap="genreMap"
+            class="popular"
+            :limit="10"
         />
         <MovieSection 
             title="현재 상영 중" 
@@ -40,15 +42,15 @@
     const genreSections = ref([])
 
     const loadNextGenre = () => {
-  if (loadedGenreIndex.value >= genreList.length) return
-  const genre = genreList[loadedGenreIndex.value]
-  genreSections.value.push({
-    id: genre.id,
-    name: genre.name,
-    endpoint: `/discover/movie?with_genres=${genre.id}`,
-  })
-  loadedGenreIndex.value++
-}
+        if (loadedGenreIndex.value >= genreList.length) return
+        const genre = genreList[loadedGenreIndex.value]
+        genreSections.value.push({
+            id: genre.id,
+            name: genre.name,
+            endpoint: `/discover/movie?with_genres=${genre.id}`,
+        })
+        loadedGenreIndex.value++
+    }
 
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement

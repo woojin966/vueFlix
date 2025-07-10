@@ -1,11 +1,26 @@
 <template>
     <li class="movie_item">
+        <div></div>
         <img
             :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
             :alt="movie.title"
         />
         <p class="big sb">{{ movie.title }}</p>
-        <p class="text n">{{ genreNames.join(', ') }} | {{ releaseYear }}</p>
+        <div class="movie_text">
+            <p class="text n">{{ genreNames.join(', ') }} | {{ releaseYear }}</p>
+            <p class="text n">⭐ {{ movie.vote_average }}</p>
+        </div>
+        <div class="movie_btn_box">
+            <div class="thumbs">
+                <button type="button" class="text thumbs_btn up" @click="changeIcon">
+                    <font-awesome-icon :icon="['far', 'thumbs-up']" />
+                </button>
+                <button type="button" class="text thumbs_btn down" @click="changeIcon">
+                    <font-awesome-icon :icon="['far', 'thumbs-down']" />
+                </button>
+            </div>
+            <button type="button" class="text mb movie_detail_btn">상세</button>
+        </div>
     </li>
 </template>
 
@@ -21,6 +36,10 @@
     const genreNames = props.movie.genre_ids
     ? props.movie.genre_ids.map(id => props.genres[id] || '기타')
     : []
+
+    const changeIcon = () => {
+
+    }
 </script>
 
 <style scoped lang="scss">

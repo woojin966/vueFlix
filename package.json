@@ -14,7 +14,9 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@vitejs/plugin-vue": "^6.0.0",
     "axios": "^1.10.0",
-    "hangul-js": "^0.2.6"
+    "hangul-js": "^0.2.6",
+    "swiper": "^11.2.10",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "sass-embedded": "^1.89.2"
