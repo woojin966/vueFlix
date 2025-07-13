@@ -1,9 +1,14 @@
 <template>
     <div :class="['movie_item', { popular: endpoint === '/movie/popular' }]">
         <p v-if="endpoint === '/movie/popular'" :class="['popular_num bb', `num_${index}`]">{{ index + 1 }}</p>
+        <div v-if="!movie.poster_path" class="no_img">
+            <font-awesome-icon :icon="['fas', 'ban']" />
+            <p class="medium">NO POSTER</p>
+        </div>
         <img
+            v-else
             :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-            :alt="movie.title"
+            :alt="movie.poster_path ? movie.title : ''"
         />
         <div>
             <p class="big sb">{{ movie.title }}</p>

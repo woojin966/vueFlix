@@ -18,6 +18,13 @@
         // 부모 컴포넌트로 이벤트 전송 : update:propName - V-model 커스텀 연동
         emit('update:keyword', keyword.value)
     }
+
+    // 닫기 버튼 누르면 검색창 비우기
+    defineExpose({
+        clearInput: () => {
+            keyword.value = ''
+        }
+    })
 </script>
 
 <style scoped lang="scss">

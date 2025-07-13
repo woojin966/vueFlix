@@ -1,13 +1,13 @@
 <template>
     <article class="header_article">
         <section class="logo_section">
-            <a href="javascript:void(0)" class="big bb">VUEFLIX</a>
+            <a href="javascript:void(0)" class="big bb" @click="closeSearch">VUEFLIX</a>
         </section>
         <section class="searchbar_btn_section">
             <div class="searchbar_box">
                 <!-- $event : SearchBar.vue에서 emit('update:keyword', keyword.value)로 보낸 값 - 입력한 키워드 -->
-                <SearchBar v-if="showSearch" @close="showSearch = false" @update:keyword="$emit('update:keyword', $event)"></SearchBar>
-                <button v-if="showSearch" @click="showSearch=false" class="search_close_btn">
+                <SearchBar v-if="showSearch" @close="showSearch = false" @update:keyword="$emit('update:keyword', $event)" ref="searchBarRef"></SearchBar>
+                <button v-if="showSearch" @click="closeSearch" class="search_close_btn">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
                 </button>
                 <button v-else @click="showSearch=true" type="button" class="search_btn">
@@ -53,6 +53,7 @@
     // 검색바 보이기
     // ref() : 반응현 변수 -> 값이 바뀌면 dom도 자동으로 바뀌게 함
     const showSearch = ref(false)
+    const searchBarRef = ref(null)
 
     // 알람박스 보이기
     const showAlarm = ref(false)
@@ -67,6 +68,17 @@
     const toggleProfile = () => {
         showProfile.value = !showProfile.value
         showAlarm.value = false
+    }
+
+    // 검색창 닫기 기능
+    const closeSearch = () => {
+        showSearch.value = false
+        // SearchBar 인풋 비우기
+        if (searchBarRef.value?.clearInput) {
+            searchBarRef.value.clearInput()
+        }
+        // App.vue에 keyword도 초기화되도록 emit
+        emit('update:keyword', '')
     }
 
     // app.vue로 검색 키워드 보내기

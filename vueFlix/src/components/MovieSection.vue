@@ -68,7 +68,7 @@
     centeredSlides: false,
     centeredSlidesBounds: true,
     loop: false,
-    spaceBetween: 20,
+    spaceBetween: 16,
   },
   1280: {
     slidesPerView: 4,

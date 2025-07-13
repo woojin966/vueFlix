@@ -1,14 +1,17 @@
 <template>
-    <section class="search_results">
-    <ul v-if="movies.length">
+    <section :class="['search_results', {'no_search' : movies.length == 0}]">
+    <div v-if="movies.length">
       <MovieItem
         v-for="movie in movies"
         :key="movie.id"
         :movie="movie"
         :genres="genreMap"
       />
-    </ul>
-    <p v-else>검색 결과가 없습니다.</p>
+    </div>
+    <div v-else>
+        <font-awesome-icon :icon="['fas', 'ban']" />
+        <p >검색 결과가 없습니다.</p>
+    </div>
   </section>
 </template>
 
@@ -44,3 +47,7 @@
         onMounted(fetchSearchResults)
         watch(() => props.keyword, fetchSearchResults)
 </script>
+
+<style scoped lang="scss">
+@import '../assets/searchresult.scss';
+</style>

@@ -34,12 +34,15 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount } from 'vue'
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
     import MovieSection from './MovieSection.vue'
     import { genreMap, genreList } from '../data/genres'
 
     const loadedGenreIndex = ref(0)
     const genreSections = ref([])
+    const props = defineProps({
+        keyword: String
+    })
 
     const loadNextGenre = () => {
         if (loadedGenreIndex.value >= genreList.length) return
@@ -52,6 +55,12 @@
         loadedGenreIndex.value++
     }
 
+    const initMovieSections = () => {
+        genreSections.value = []
+        loadedGenreIndex.value = 0
+        loadNextGenre()
+    }
+
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement
         if (scrollTop + clientHeight >= scrollHeight - 100) {
@@ -62,11 +71,18 @@
     onMounted(() => {
         // 처음 한 섹션은 미리 로딩
         loadNextGenre()
+        initMovieSections()
         window.addEventListener('scroll', handleScroll) 
     })
 
     onBeforeUnmount(() => {
         window.removeEventListener('scroll', handleScroll)
+    })
+
+    watch(() => props.keyword, (newVal) => {
+        if (newVal === '') {
+            initMovieSections()
+        }
     })
 </script>
 
