@@ -14,6 +14,7 @@
                     :genres="genreMap"
                     :index="index"
                     :endpoint="props.endpoint"
+                    @notify="$emit('notify', $event)"
                 ></MovieItem>
             </SwiperSlide>
         </Swiper >
@@ -38,7 +39,7 @@
         limit: {
             type: Number,
             default: 20 // 기본은 20개로 설정
-        }
+        },
     })
 
     const movies = ref([])

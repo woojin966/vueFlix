@@ -6,21 +6,25 @@
             :genreMap="genreMap"
             class="popular"
             :limit="10"
+            @notify="$emit('notify', $event)"
         />
         <MovieSection 
             title="현재 상영 중" 
             endpoint="/movie/now_playing" 
             :genreMap="genreMap"
+            @notify="$emit('notify', $event)"
         />
         <MovieSection 
             title="상영 예정" 
             endpoint="/movie/upcoming" 
             :genreMap="genreMap"
+            @notify="$emit('notify', $event)"
         />
         <MovieSection 
             title="평점 높은 영화" 
             endpoint="/movie/top_rated"  
             :genreMap="genreMap"
+            @notify="$emit('notify', $event)"
         />
         <!-- 무한 스크롤로 추가되는 장르 섹션 -->
         <MovieSection 
@@ -29,6 +33,7 @@
             :title="section.name"
             :endpoint="section.endpoint"
             :genreMap="genreMap"
+            @notify="$emit('notify', $event)"
         />
     </article>
 </template>
@@ -41,7 +46,7 @@
     const loadedGenreIndex = ref(0)
     const genreSections = ref([])
     const props = defineProps({
-        keyword: String
+        keyword: String,
     })
 
     const loadNextGenre = () => {

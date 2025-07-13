@@ -15,14 +15,18 @@
                 </button>
             </div>
             <div class="header_btn_box">
-                <button @click="toggleAlarm" type="button" class="alarm_btn">
+                <button @click="toggleAlarm" type="button" :class="['alarm_btn', {'has_alarm' : notifications.length !== 0}]">
                     <font-awesome-icon :icon="['far', 'bell']" />
                 </button>
                 <div v-if="showAlarm" class="alarm_box popup">
                     <ul>
                         <li v-if="notifications.length === 0" class="no_alarm">알림이 없습니다.</li>
-                        <li v-else v-for="(notice, index) in notifications" :key="index">{{ notice }}</li>
+                        <li v-else v-for="(notice, index) in notifications" :key="index">
+                            <font-awesome-icon :icon="notice.icon" /> 
+                            <p class="text n">{{ notice.message }}</p>
+                        </li>
                     </ul>
+                    <button v-if="notifications.length !== 0" class="text reset_btn" @click="clearNotifications">알림 전체 삭제</button>
                 </div>
                 <button @click="toggleProfile" type="button" class="profile_btn">
                     <font-awesome-icon :icon="['far', 'user']" />
@@ -47,42 +51,66 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import SearchBar from './SearchBar.vue'
+import { ref, onMounted } from 'vue'
+import SearchBar from './SearchBar.vue'
 
-    // 검색바 보이기
-    // ref() : 반응현 변수 -> 값이 바뀌면 dom도 자동으로 바뀌게 함
-    const showSearch = ref(false)
-    const searchBarRef = ref(null)
+// 검색창 관련
+const showSearch = ref(false)
+const searchBarRef = ref(null)
 
-    // 알람박스 보이기
-    const showAlarm = ref(false)
-    const notifications = ref([]) // or ['알림1', '알림2'] == notice 등
-    const toggleAlarm = () => {
-        showAlarm.value = !showAlarm.value
-        showProfile.value = false
-    }
+// 검색 닫기
+const closeSearch = () => {
+  showSearch.value = false
+  if (searchBarRef.value?.clearInput) {
+    searchBarRef.value.clearInput()
+  }
+  emit('update:keyword', '')
+}
 
-    // 프로필 박스 보이기
-    const showProfile = ref(false)
-    const toggleProfile = () => {
-        showProfile.value = !showProfile.value
-        showAlarm.value = false
-    }
+// 알림 관련
+const STORAGE_KEY = 'vueflix-notifications'
+const notifications = ref([])
+const showAlarm = ref(false)
 
-    // 검색창 닫기 기능
-    const closeSearch = () => {
-        showSearch.value = false
-        // SearchBar 인풋 비우기
-        if (searchBarRef.value?.clearInput) {
-            searchBarRef.value.clearInput()
-        }
-        // App.vue에 keyword도 초기화되도록 emit
-        emit('update:keyword', '')
-    }
 
-    // app.vue로 검색 키워드 보내기
-    const emit = defineEmits(['update:keyword'])
+const toggleAlarm = () => {
+  showAlarm.value = !showAlarm.value
+  showProfile.value = false
+}
+
+const addNotification = (notice) => {
+  notifications.value.unshift(notice)
+  showAlarm.value = true
+  saveToStorage()
+}
+
+const saveToStorage = () => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications.value))
+}
+
+const clearNotifications = () => {
+  notifications.value = []
+  localStorage.removeItem(STORAGE_KEY)
+}
+
+onMounted(() => {
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (saved) {
+    notifications.value = JSON.parse(saved)
+  }
+})
+
+defineExpose({ addNotification })
+
+// 프로필 박스 관련
+const showProfile = ref(false)
+const toggleProfile = () => {
+  showProfile.value = !showProfile.value
+  showAlarm.value = false
+}
+
+// emit 선언
+const emit = defineEmits(['update:keyword', 'clear-votes'])
 </script>
 
 <style scoped lang="scss">
