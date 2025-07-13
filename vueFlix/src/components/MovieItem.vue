@@ -1,11 +1,11 @@
 <template>
-    <li class="movie_item">
-        <p v-if="endpoint === '/movie/popular'" class="popular_num">{{ index + 1 }}</p>
+    <div :class="['movie_item', { popular: endpoint === '/movie/popular' }]">
+        <p v-if="endpoint === '/movie/popular'" :class="['popular_num bb', `num_${index}`]">{{ index + 1 }}</p>
+        <img
+            :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+            :alt="movie.title"
+        />
         <div>
-            <img
-                :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-                :alt="movie.title"
-            />
             <p class="big sb">{{ movie.title }}</p>
             <div class="movie_text">
                 <p class="text n">{{ genreNames.join(', ') }} | {{ releaseYear }}</p>
@@ -23,7 +23,7 @@
                 <button type="button" class="text mb movie_detail_btn">상세</button>
             </div>
         </div>
-    </li>
+    </div>
 </template>
 
 <script setup>

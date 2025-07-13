@@ -69,3 +69,7 @@
         window.removeEventListener('scroll', handleScroll)
     })
 </script>
+
+<style scoped lang="scss">
+@import '../assets/movielist.scss';
+</style>

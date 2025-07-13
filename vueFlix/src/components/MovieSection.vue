@@ -60,31 +60,24 @@
     centeredSlides: true,
     centeredSlidesBounds: true,
     loop: true,
-    spaceBetween: 20,
+    spaceBetween: 12,
   },
   // 480px 이상
-  480: {
-    slidesPerView: 3,
-    centeredSlides: false,
-    centeredSlidesBounds: true,
-    loop: false,
-    spaceBetween: 20,
-  },
-  840: {
-    slidesPerView: 3,
-    centeredSlides: false,
-    centeredSlidesBounds: true,
-    loop: false,
-    spaceBetween: 20,
-  },
   1024: {
-    slidesPerView: 4,
+    slidesPerView: 3,
     centeredSlides: false,
     centeredSlidesBounds: true,
     loop: false,
     spaceBetween: 20,
   },
   1280: {
+    slidesPerView: 4,
+    centeredSlides: false,
+    centeredSlidesBounds: true,
+    loop: false,
+    spaceBetween: 20,
+  },
+  1900: {
     slidesPerView: 5,
     centeredSlides: false,
     centeredSlidesBounds: true,
@@ -118,3 +111,8 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updateCenteredSlides)
 })
 </script>
+
+<style scoped lang="scss">
+@import '../assets/moviesection.scss';
+// @import '../assets/movieitem.scss'; 
+</style>
