@@ -6,7 +6,7 @@
         .swiper-slide{flex-shrink: 0;  }
     }
     .swiper-button-prev, .swiper-button-next{
-        width: 20px; height: 20px; margin-top: 0; top: calc(50% - 10px); color: #fff;
+        width: 20px; height: 20px; margin-top: 0; top: calc(50% - 10px); color: #fff; z-index: 5;
         &::before{position: absolute; top: 0; left: 0; content: ''; border-top: 4px solid #fff; width: 100%; height: 100%;}
         &::after{display: none;}
     }
