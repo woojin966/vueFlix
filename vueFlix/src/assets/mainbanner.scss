@@ -1,0 +1,137 @@
+.banner_article{padding: 60px 0 0 60px;
+    .main-banner-swiper{
+        .swiper-slide{
+            position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 40px;
+            &::before{content: "";position: absolute;bottom: 0;left: 0;width: 100%;height: 30%;background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);z-index: 2;}
+            .movie_info_section{
+                width: 50%;
+                .title_box{
+                    display: flex; gap: 0; margin-bottom: 20px; flex-direction: column;
+                    .age_grade{
+                        font-size: 52px; font-weight: bold; /* letter-spacing: -8px; */ padding: 8px;  border-radius: 12px; line-height: 1; text-align: center; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+                        &.age-12{border: 4px solid #fff; background-color: green; color: #fff;}
+                        &.age-19{border: 4px solid #fff; background-color: purple; color: #fff;}
+                    }
+                }
+                .detail_btn{margin-top: 40px; color: #fff; padding: 8px 12px; border-radius: 48px; border: 2px solid #fff;}
+            }
+            .movie_poster_section{
+                width: 40%;
+                img{width: 100%; height: calc(100dvh - 116px); object-fit: cover; object-position: top center;}
+            }
+        }
+        :deep(.swiper-pagination){
+            left: unset; right: 60px; bottom: 40px; width: max-content; 
+            .swiper-pagination-bullet{
+                margin: 0 2px; width: 20px; height: 4px; background-color: rgba(255, 255, 255, .4); border-radius: 0; opacity: 1;
+                &.swiper-pagination-bullet-active{background-color: #fff;}
+            }
+        }
+    }
+    @media all and (max-width: 1440px){
+        .main-banner-swiper{
+            .swiper-slide{
+                .movie_poster_section{width: 50%;}
+            }
+        }
+    }
+    @media all and (max-width: 1280px){
+        padding: 60px 0 0 40px;
+        .main-banner-swiper{
+            .swiper-slide{
+                .movie_info_section{
+                    .title_box{
+                        .age_grade{font-size: 44px; width: 64px; height: 64px;}
+                    }
+                }
+                .movie_poster_section{
+                }
+            }
+        }
+    }
+    @media all and (max-width: 1024px){
+        padding: 60px 0 0 20px;
+        .main-banner-swiper{
+            .swiper-slide{
+                .movie_info_section{
+                    .title_box{
+                        margin-bottom: 12px;
+                        .age_grade{font-size: 40px; width: 60px; height: 60px;}
+                    }
+                    .detail_btn{margin-top: 28px;}
+                }
+                .movie_poster_section{
+                }
+            }
+            :deep(.swiper-pagination){right: 40px;}
+        }
+        @media all and (min-height: 1300px){
+            padding: 60px 0 0;
+            .main-banner-swiper{
+                .swiper-slide{
+                     flex-direction: column; justify-content: space-between; height: calc(100dvh - 116px);
+                    .movie_info_section{
+                        width: 100%; padding: 0 20px;
+                        .title_box{
+                            flex-direction: row; gap: 8px;
+                            .age_grade{font-size: 40px; width: 60px; height: 60px;}
+                        }
+                    }
+                    .movie_poster_section{
+                        position: relative; z-index: 1;
+                         &::before{content: "";position: absolute;top: 0;left: 0;width: 100%;height: 20%;background: linear-gradient(to bottom, rgba(0, 0, 0, 1), transparent);z-index: 2;}
+                        width: 100%;
+                        img{height: 72dvh;}
+                    }
+                }
+                :deep(.swiper-pagination){right: 0; width: 100%;}
+            }
+        }
+    }
+    @media all and (max-width: 840px){
+        padding: 40px 0 0;
+        .main-banner-swiper{
+            .swiper-slide{
+                flex-direction: column; justify-content: space-between; height: calc(100dvh - 86px);
+                .movie_info_section{
+                    width: 100%; padding: 0 20px;
+                    .title_box{
+                        flex-direction: row; gap: 8px;
+                        .age_grade{font-size: 40px; width: 60px; height: 60px;}
+                    }
+                    .detail_btn{font-size: 2.8vw; margin-top: 0;}
+                    p.medium{font-size: 2.8vw; display: none;}
+                }
+                .movie_poster_section{
+                    position: relative; z-index: 1;
+                    &::before{content: "";position: absolute;top: 0;left: 0;width: 100%;height: 20%;background: linear-gradient(to bottom, rgba(0, 0, 0, 1), transparent);z-index: 2;}
+                    width: 100%;
+                    img{height: 80dvh;}
+                }
+            }
+            :deep(.swiper-pagination){right: 0; width: 100%;}
+        }
+    }
+    @media all and (max-width: 768px){
+        padding: 20px 0 0;
+        .main-banner-swiper{
+            .swiper-slide{
+                height: calc(100dvh - 66px);
+            }
+        }
+    }
+    @media all and (max-width: 480px){
+        .main-banner-swiper{
+            .swiper-slide{
+                .movie_info_section{
+                    padding: 0 16px;
+                    .title_box{
+                        margin-bottom: 8px;
+                        .age_grade{font-size: 7vw; width: 48px; height: 48px; border-radius: 8px;}
+                    }
+                    .detail_btn{font-size: 4vw;}
+                }
+            }
+        }
+    }
+}
