@@ -1,0 +1,11 @@
+.thumbs{
+    display: flex;
+    button{width: 32px; height: 32px; border-radius: 20px;  color: #fff;}
+    @media all and (max-width: 840px){
+        gap: 12px;
+        button{width: 52px; height: 52px; border-radius: 52px;}
+    }
+    @media all and (max-width: 480px){
+        button{width: 44px; height: 44px; border-radius: 44px;}
+    }
+}

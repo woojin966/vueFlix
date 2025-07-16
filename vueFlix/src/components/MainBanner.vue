@@ -1,10 +1,11 @@
 <template>
     <article class="banner_article">
-        <!-- :autoplay="{ delay: 8000, disableOnInteraction: false }" -->
+        <!--:autoplay="{ delay: 8000, disableOnInteraction: false }" -->
         <Swiper
+            v-if="popularMoviesForBanner.length"
             :modules="[Autoplay, Pagination]"
             :loop="true"
-      
+            :autoplay="{ delay: 8000, disableOnInteraction: false }"
             :pagination="{ clickable: true }"
             class="main-banner-swiper"
         >
