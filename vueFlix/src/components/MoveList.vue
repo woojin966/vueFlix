@@ -7,24 +7,28 @@
             class="popular"
             :limit="10"
             @notify="$emit('notify', $event)"
+            @open-modal="$emit('open-modal', $event)"
         />
         <MovieSection 
             title="현재 상영 중" 
             endpoint="/movie/now_playing" 
             :genreMap="genreMap"
             @notify="$emit('notify', $event)"
+            @open-modal="$emit('open-modal', $event)"
         />
         <MovieSection 
             title="상영 예정" 
             endpoint="/movie/upcoming" 
             :genreMap="genreMap"
             @notify="$emit('notify', $event)"
+            @open-modal="$emit('open-modal', $event)"
         />
         <MovieSection 
             title="평점 높은 영화" 
             endpoint="/movie/top_rated"  
             :genreMap="genreMap"
             @notify="$emit('notify', $event)"
+            @open-modal="$emit('open-modal', $event)"
         />
         <!-- 무한 스크롤로 추가되는 장르 섹션 -->
         <MovieSection 
@@ -34,6 +38,7 @@
             :endpoint="section.endpoint"
             :genreMap="genreMap"
             @notify="$emit('notify', $event)"
+            @open-modal="$emit('open-modal', $event)"
         />
     </article>
 </template>
@@ -41,17 +46,18 @@
 <script setup>
     import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
     import MovieSection from './MovieSection.vue'
-    import { genreMap, genreList } from '../data/genres'
 
     const loadedGenreIndex = ref(0)
     const genreSections = ref([])
     const props = defineProps({
         keyword: String,
+        genreMap: Object,
+        genreList: Array,
     })
 
     const loadNextGenre = () => {
-        if (loadedGenreIndex.value >= genreList.length) return
-        const genre = genreList[loadedGenreIndex.value]
+        if (loadedGenreIndex.value >= props.genreList.length) return
+        const genre = props.genreList[loadedGenreIndex.value]
         genreSections.value.push({
             id: genre.id,
             name: genre.name,

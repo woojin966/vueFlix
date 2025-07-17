@@ -1,6 +1,6 @@
 <template>
     <section class="movie_section">
-        <h3 class="sb">{{  title  }}</h3>
+        <h2 class="sb">{{  title  }}</h2>
         <Swiper 
             :modules="[Navigation]"
             :navigation="navigationOptions"
@@ -15,6 +15,7 @@
                     :index="index"
                     :endpoint="props.endpoint"
                     @notify="$emit('notify', $event)"
+                    @open-modal="$emit('open-modal', $event)"
                 ></MovieItem>
             </SwiperSlide>
         </Swiper >
@@ -42,6 +43,8 @@
         },
     })
 
+    
+
     const movies = ref([])
     const swiperRef = ref(null)
     const uniqueId = `swiper-${Math.random().toString(36).substr(2, 9)}`
@@ -55,62 +58,62 @@
         prevEl: `.${uniqueId}-prev`
     }
     const swiperBreakpoints = {
-  // 0~479px
-  0: {
-    slidesPerView: 1.2,
-    centeredSlides: true,
-    centeredSlidesBounds: true,
-    loop: true,
-    spaceBetween: 12,
-  },
-  // 480px 이상
-  1024: {
-    slidesPerView: 3,
-    centeredSlides: false,
-    centeredSlidesBounds: true,
-    loop: false,
-    spaceBetween: 16,
-  },
-  1280: {
-    slidesPerView: 4,
-    centeredSlides: false,
-    centeredSlidesBounds: true,
-    loop: false,
-    spaceBetween: 20,
-  },
-  1900: {
-    slidesPerView: 5,
-    centeredSlides: false,
-    centeredSlidesBounds: true,
-    loop: false,
-    spaceBetween: 20,
-  },
-}
-    onMounted(async () => {
-  // 영화 데이터 가져오기
-  const res = await axios.get(`https://api.themoviedb.org/3${props.endpoint}`, {
-    params: {
-      api_key: 'fcc17cdaa94f35e5e1cf80b2de9ea4e7',
-      language: 'ko-KR',
+      // 0~479px
+      0: {
+        slidesPerView: 1.2,
+        centeredSlides: true,
+        centeredSlidesBounds: true,
+        loop: true,
+        spaceBetween: 12,
+      },
+      // 480px 이상
+      1024: {
+        slidesPerView: 3,
+        centeredSlides: false,
+        centeredSlidesBounds: true,
+        loop: false,
+        spaceBetween: 16,
+      },
+      1280: {
+        slidesPerView: 4,
+        centeredSlides: false,
+        centeredSlidesBounds: true,
+        loop: false,
+        spaceBetween: 20,
+      },
+      1900: {
+        slidesPerView: 5,
+        centeredSlides: false,
+        centeredSlidesBounds: true,
+        loop: false,
+        spaceBetween: 20,
+      },
     }
-  })
-  movies.value = res.data.results
+    onMounted(async () => {
+      // 영화 데이터 가져오기
+      const res = await axios.get(`https://api.themoviedb.org/3${props.endpoint}`, {
+        params: {
+          api_key: 'fcc17cdaa94f35e5e1cf80b2de9ea4e7',
+          language: 'ko-KR',
+        }
+      })
+      movies.value = res.data.results
 
-  // Swiper 네비게이션 초기화
-  await nextTick()
-  if (swiperRef.value?.swiper) {
-    swiperRef.value.swiper.navigation.init()
-    swiperRef.value.swiper.navigation.update()
-  }
+      // Swiper 네비게이션 초기화
+      await nextTick()
+      if (swiperRef.value?.swiper) {
+        swiperRef.value.swiper.navigation.init()
+        swiperRef.value.swiper.navigation.update()
+      }
 
-  // centeredSlides 반영
-  updateCenteredSlides()
-  window.addEventListener('resize', updateCenteredSlides)
-})
+      // centeredSlides 반영
+      updateCenteredSlides()
+        window.addEventListener('resize', updateCenteredSlides)
+      })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateCenteredSlides)
-})
+      onBeforeUnmount(() => {
+        window.removeEventListener('resize', updateCenteredSlides)
+      })
 </script>
 
 <style scoped lang="scss">

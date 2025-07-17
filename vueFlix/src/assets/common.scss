@@ -3,8 +3,8 @@
 
 // font
 h1{font-size: 60px;}
-h2{font-size: 36px;}
-h3{font-size: 24px;}
+h2{font-size: 24px;}
+h3{font-size: 20px;}
 .big{font-size: 20px;}
 .medium{font-size: 18px;}
 .text{font-size: 16px;}
@@ -26,19 +26,19 @@ h3{font-size: 24px;}
 }
 @media all and (max-width: 840px){
     h1{font-size: 5.6vw;}
-    h2{font-size: 5vw;}
-    h3{font-size: 4.4vw;}
+    h2{font-size: 4.4vw;}
+    h3{font-size: 4.2vw;}
     .big{font-size: 4vw;}
-    .medium{font-size: 3.6vw;}
+    .medium{font-size: 3.4vw;}
     .text{font-size: 3.2vw;}
 }
 @media all and (max-width: 480px){
     h1{font-size: 7.6vw;}
-    h2{font-size: 7vw;}
-    h3{font-size: 6.4vw;}
+    h2{font-size: 6.4vw;}
+    h3{font-size: 6vw;}
     .big{font-size: 5.8vw;}
-    .medium{font-size: 5.4vw;}
-    .text{font-size: 5.0vw;}
+    .medium{font-size: 5.0vw;}
+    .text{font-size: 4.8vw;}
 }
 
 .body_wrap{font-family: $mainFont; line-height: 1.4; background-color: #000; color: #fff;}

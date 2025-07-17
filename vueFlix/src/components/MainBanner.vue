@@ -14,7 +14,7 @@
                     <div>
                         <div class="title_box">
                             <h1 class="bb">{{ movie.title }}</h1>
-                            <p v-if="movie.krRelease" class="age_grade" :class="`age-${movie.krRelease}`">{{ movie.krRelease }}</p>
+                            <!-- <p v-if="movie.krRelease" class="age_grade" :class="`age-${movie.krRelease}`">{{ movie.krRelease }}</p> -->
                         </div>
                         <p class="medium mb">{{ movie.overview || '설명이 없습니다.' }}</p>
                     </div>
@@ -62,7 +62,7 @@
                 language: 'ko-KR',
             }
         })
-        const movies = res.data.results.slice(0, 10) // 상위 5개만
+        const movies = res.data.results.slice(0, 10) 
         const enriched = await Promise.all(
             movies.map(async (movie) => {
                 const krRelease = await fetchAgeRating(movie.id)
