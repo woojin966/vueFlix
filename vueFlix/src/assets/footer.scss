@@ -1,5 +1,5 @@
 .footer_wrap{
-    display: flex; flex-direction: column; gap: 20px; padding: 20px 60px; background-color: #000; color: gray;
+    display: flex; flex-direction: column; gap: 20px; padding: 20px 60px; background-color: #000; color: $gray;
     button{cursor: pointer;}
     .footer_top{
         ul{
@@ -19,7 +19,7 @@
         }
     }
     .footer_bottom{
-        .servicecode_btn{padding: 8px 12px; border: 1px solid gray; color: gray; text-align: center;}
+        .servicecode_btn{padding: 8px 12px; border: 1px solid $gray; color: $gray; text-align: center;}
         .infomation_box{
             margin-top: 12px;
         }

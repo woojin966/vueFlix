@@ -1,9 +1,9 @@
 <template>
     <div class="thumbs">
-        <button type="button" class="text thumbs_btn up" @click="handleClick('up')">
+        <button type="button" class="text thumbs_btn up" :class="{'voted' : upVoted}" @click="handleClick('up')">
             <font-awesome-icon :icon="upVoted ? ['fas', 'thumbs-up'] : ['far', 'thumbs-up']" />
         </button>
-        <button type="button" class="text thumbs_btn down" @click="handleClick('down')">
+        <button type="button" class="text thumbs_btn down" :class="{'voted' : downVoted}" @click="handleClick('down')">
             <font-awesome-icon :icon="downVoted ? ['fas', 'thumbs-down'] : ['far', 'thumbs-down']" />
         </button>
     </div>

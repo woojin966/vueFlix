@@ -1,7 +1,7 @@
 .movie_modal_article{
     position: fixed; top: 0; left: 0; z-index: 15; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background-color: rgba(0,0,0,.6);
     > div{
-         width: 24%; height: 80dvh; background-color: gray; border-radius: 8px; padding: 28px 24px; overflow-y: auto;
+         width: 24%; height: 80dvh; background-color: $gray; border-radius: 8px; padding: 28px 24px; overflow-y: auto;
         &::-webkit-scrollbar {width: 4px; height: 4px;}
         &::-webkit-scrollbar-track {background: transparent;}
         &::-webkit-scrollbar-thumb {background: #eee; border-radius: 10px;}
@@ -22,7 +22,7 @@
                     &.age-All{border: 2px solid #fff; background-color: green;}
                     &.age-12, &.age-15{border: 2px solid #000; background-color: gold; color: #000;}
                     &.age-19{border: 2px solid #fff; background-color: red;}
-                    &.age-NR{border: 2px solid #fff; background-color: #fff; color: gray;}
+                    &.age-NR{border: 2px solid #fff; background-color: #fff; color: $gray;}
                 }
                 .movie_info_box2{
                     p.text{margin-bottom: 4px;}

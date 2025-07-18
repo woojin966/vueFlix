@@ -1,10 +1,13 @@
 .header_article{
     position: sticky; top: 0; left: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 8px 60px; background-color: #000; color: #fff; height: 56px;
+    .logo_btn{
+        img{height: 24px; width: auto;}
+    }
     button{
         color: #fff; font-size: 16px;
         &.has_alarm{
             position: relative;
-            &::before{content: ''; position: absolute; top: -4px; right: -4px; width: 6px; height: 6px; border-radius: 4px; background-color: #fff;}
+            &::before{content: ''; position: absolute; top: -4px; right: -4px; width: 6px; height: 6px; border-radius: 4px; background-color: $point;}
         }
     }
     .searchbar_btn_section{
@@ -21,12 +24,12 @@
                     &::before{right: 40px;}
                     &::-webkit-scrollbar {width: 4px; height: 4px;}
                     &::-webkit-scrollbar-track {background: transparent;}
-                    &::-webkit-scrollbar-thumb {background: gray; border-radius: 10px;}
+                    &::-webkit-scrollbar-thumb {background: $gray; border-radius: 10px;}
                     width: 20vw; height: 200px; overflow-y: auto;
                     ul{
                         width: 100%;
                         li{
-                            display: flex; gap: 8px; padding: 8px 12px;  border-bottom: 1px solid gray;
+                            display: flex; gap: 8px; padding: 8px 12px;  border-bottom: 1px solid $gray;
                             svg{margin-top: 2px;}
                             &.no_alarm{border-bottom: none; text-align: center;}
                         }
@@ -38,7 +41,7 @@
                     &::before{ right: 8px;}
                     flex-direction: column; align-items: flex-start; width: 160px;
                     ul{
-                        width: 100%; border-bottom: 1px solid gray;
+                        width: 100%; border-bottom: 1px solid $gray;
                         a{padding: 8px 12px; width: 100%; border-bottom: 1px sold #fff;}
                     }
                     .logout_btn{padding: 8px 12px;}

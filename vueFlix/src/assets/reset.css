@@ -95,7 +95,7 @@ html,
 body {
   font-family: "Pretendard", "Apple SD Sandol Gothic Neo", sans-serif;
   line-height: 1.2;
-  color: var(--grayDark3);
+  color: var(--$grayDark3);
 }
 article,
 aside,

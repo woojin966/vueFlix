@@ -1,6 +1,9 @@
 .thumbs{
     display: flex; gap: 4px;
-    button{width: 32px; height: 32px; border-radius: 20px;  color: #fff; font-size: 24px;}
+    button{
+        width: 32px; height: 32px; border-radius: 20px;  color: #fff; font-size: 24px;
+        &.voted{color: $subPoint;}
+    }
     @media all and (max-width: 840px){
         button{width: 52px; height: 52px; border-radius: 52px; font-size: 36px;}
     }

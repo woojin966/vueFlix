@@ -1,7 +1,9 @@
 <template>
     <article class="header_article">
         <section class="logo_section">
-            <a href="javascript:void(0)" class="big bb" @click="closeSearch">VUEFLIX</a>
+            <a href="javascript:void(0)" class="logo_btn" @click="closeSearch">
+              <img src="../data/vueflix.svg" alt="logo">
+            </a>
         </section>
         <section class="searchbar_btn_section">
             <div class="searchbar_box">

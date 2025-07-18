@@ -22,11 +22,11 @@
                 <p class="text n">⭐ {{ movie.vote_average }}</p>
             </div>
             <div class="movie_btn_box">
-                <ThumbsButton
+                <!-- <ThumbsButton
                     :movie-id="movie.id"
                     :movie-title="movie.title"
                     @notify="$emit('notify', $event)"
-                />
+                /> -->
                 <button type="button" class="text mb movie_detail_btn" @click.stop="$emit('open-modal', movie)">상세</button>
             </div>
         </div>
