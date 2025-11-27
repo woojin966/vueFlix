@@ -9,12 +9,13 @@
     <SearchResults 
       v-if="keyword" 
       :keyword="keyword" 
+      @open-modal="handleOpenModal"
     />
     <MoveList 
       v-else 
       :keyword="keyword" 
-      :genreMap="genreMap"
-      :genreList="genreList"
+      :genreMap="genresMapActive"
+      :genreList="genres"
       @notify="handleNotify"
       @open-modal="handleOpenModal"  
     >
@@ -23,7 +24,7 @@
     <MovieModal 
       v-if="showModal"
       :movie="selectedMovie"
-      :genres="genreMap"
+      :genres="genresMapActive"
       @close="handleCloseModal"
       @notify="handleNotify"
     />
@@ -38,7 +39,9 @@
   import MoveList from './components/MoveList.vue'
   import MovieModal from './components/MovieModal.vue'
   import Footer from './components/Footer.vue'
-  import { genreMap, genreList } from './data/genres'
+import { useGenres } from './composables/useGenres'
+
+  const { genresMapActive, genresMapKo, genresMapEn } = useGenres()
 
   const keyword = ref('')
   const headerRef = ref(null)

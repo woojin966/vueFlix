@@ -17,36 +17,52 @@
                 </button>
             </div>
             <div class="header_btn_box">
-                <button @click="toggleAlarm" type="button" :class="['alarm_btn', {'has_alarm' : notifications.length !== 0}]">
-                    <font-awesome-icon :icon="['far', 'bell']" />
+              <button @click="toggleAlarm" type="button" :class="['alarm_btn', {'has_alarm' : notifications.length !== 0}]">
+                <font-awesome-icon :icon="['far', 'bell']" />
+              </button>
+              <div v-if="showAlarm" class="alarm_box popup">
+                <ul>
+                  <li v-if="notifications.length === 0" class="no_alarm">알림이 없습니다.</li>
+                  <li v-else v-for="(notice, index) in notifications" :key="index">
+                    <font-awesome-icon :icon="notice.icon" /> 
+                      <p class="text n">{{ notice.message }}</p>
+                  </li>
+                </ul>
+                <button v-if="notifications.length !== 0" class="text reset_btn" @click="clearNotifications">알림 전체 삭제</button>
+              </div>
+              <button @click="toggleProfile" type="button" class="profile_btn">
+                <font-awesome-icon :icon="['far', 'user']" />
+              </button>
+              <div v-if="showProfile" class="profile_box popup">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)">프로필 관리</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)">계정</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)">고객센터</a>
+                  </li>
+                </ul>
+                <button type="button" class="logout_btn">로그아웃</button>
+              </div>
+              <div class="lang_btn_box">
+                <button 
+                  type="button" 
+                  @click="setKorean"
+                  :class="{ active: currentLang === 'ko' }"
+                >
+                  KR
                 </button>
-                <div v-if="showAlarm" class="alarm_box popup">
-                    <ul>
-                        <li v-if="notifications.length === 0" class="no_alarm">알림이 없습니다.</li>
-                        <li v-else v-for="(notice, index) in notifications" :key="index">
-                            <font-awesome-icon :icon="notice.icon" /> 
-                            <p class="text n">{{ notice.message }}</p>
-                        </li>
-                    </ul>
-                    <button v-if="notifications.length !== 0" class="text reset_btn" @click="clearNotifications">알림 전체 삭제</button>
-                </div>
-                <button @click="toggleProfile" type="button" class="profile_btn">
-                    <font-awesome-icon :icon="['far', 'user']" />
+                <button 
+                  type="button" 
+                  @click="setEnglish"
+                  :class="{ active: currentLang === 'en' }"
+                >
+                  EN
                 </button>
-                <div v-if="showProfile" class="profile_box popup">
-                    <ul>
-                        <li>
-                            <a href="javascript:void(0)">프로필 관리</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">계정</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">고객센터</a>
-                        </li>
-                    </ul>
-                    <button type="button" class="logout_btn">로그아웃</button>
-                </div>
+              </div>
             </div>
         </section>
     </article>
@@ -55,6 +71,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import SearchBar from './SearchBar.vue'
+import { useGenres } from '../composables/useGenres'
+
+// 장르, 언어변환
+const { currentLang, setLang } = useGenres()
+const setKorean = () => setLang('ko')
+const setEnglish = () => setLang('en')
 
 // 검색창 관련
 const showSearch = ref(false)

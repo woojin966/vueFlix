@@ -34,26 +34,32 @@
 </template>
 
 <script setup>
-    // import { genreMap } from '../data/genres'
-    import { ref, onMounted, watch } from 'vue'
-    import ThumbsButton from './ThumbsButton.vue'
+import { ref, computed } from 'vue'
+import ThumbsButton from './ThumbsButton.vue'
 
-    const props = defineProps({ 
-        movie: Object, 
-        genres: Object,
-        index: Number,
-        endpoint: String, 
-    })
-    
-    const hover = ref(false)
-    const releaseYear = props.movie.release_date
-    ? props.movie.release_date.slice(0, 4)
-    : '정보 없음'
+const props = defineProps({ 
+    movie: Object,
+    genresMap: Object,  
+    index: Number,
+    endpoint: String, 
+})
 
-    const genreNames = props.movie.genre_ids
-    ? props.movie.genre_ids.map(id => props.genres[id] || '기타')
-    : []
+const hover = ref(false)
+
+const releaseYear = computed(() => 
+    props.movie.release_date 
+        ? props.movie.release_date.slice(0, 4)
+        : '정보 없음'
+)
+
+const genreNames = computed(() => {
+    if (!props.movie.genre_ids) return []
+    return props.movie.genre_ids
+        .map(id => props.genresMap[id])
+        .filter(Boolean)
+})
 </script>
+
 
 <style scoped lang="scss">
 @import '../assets/movieitem.scss';

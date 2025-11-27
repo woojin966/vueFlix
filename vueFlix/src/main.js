@@ -2,6 +2,12 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/router'
 import './assets/common.scss'
+import { useGenres } from "./composables/useGenres";
+
+// const { loadGenresEn } = useGenres();
+// loadGenresEn();
+const genresStore = useGenres()
+genresStore.loadGenresEn()
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'

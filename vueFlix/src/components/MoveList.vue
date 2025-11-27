@@ -46,55 +46,60 @@
 <script setup>
     import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
     import MovieSection from './MovieSection.vue'
+    import { useGenres } from '../composables/useGenres'
 
     const loadedGenreIndex = ref(0)
     const genreSections = ref([])
     const props = defineProps({
         keyword: String,
         genreMap: Object,
-        genreList: Array,
     })
+
+    // 한국어 장르
+    const { genreListKo } = useGenres()
 
     const loadNextGenre = () => {
-        if (loadedGenreIndex.value >= props.genreList.length) return
-        const genre = props.genreList[loadedGenreIndex.value]
-        genreSections.value.push({
-            id: genre.id,
-            name: genre.name,
-            endpoint: `/discover/movie?with_genres=${genre.id}`,
-        })
-        loadedGenreIndex.value++
-    }
+  // 🔥 props.genreList → genreListKo 로 변경
+  if (loadedGenreIndex.value >= genreListKo.value.length) return
+  
+  const genre = genreListKo.value[loadedGenreIndex.value]
+
+  genreSections.value.push({
+    id: genre.id,
+    name: genre.name,
+    endpoint: `/discover/movie?with_genres=${genre.id}`,
+  })
+
+  loadedGenreIndex.value++
+}
 
     const initMovieSections = () => {
-        genreSections.value = []
-        loadedGenreIndex.value = 0
-        loadNextGenre()
-    }
+  genreSections.value = []
+  loadedGenreIndex.value = 0
+  loadNextGenre()
+}
 
     const handleScroll = () => {
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            loadNextGenre()
-        }
-    }
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+    loadNextGenre()
+  }
+}
 
     onMounted(() => {
-        // 처음 한 섹션은 미리 로딩
-        loadNextGenre()
-        initMovieSections()
-        window.addEventListener('scroll', handleScroll) 
-    })
+  initMovieSections()
+  window.addEventListener('scroll', handleScroll)
+})
 
-    onBeforeUnmount(() => {
-        window.removeEventListener('scroll', handleScroll)
-    })
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
-    watch(() => props.keyword, (newVal) => {
-        if (newVal === '') {
-            initMovieSections()
-        }
-    })
+watch(() => props.keyword, (newVal) => {
+  if (newVal === '') {
+    initMovieSections()
+  }
+})
 </script>
 
 <style scoped lang="scss">
