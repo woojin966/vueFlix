@@ -1,83 +1,138 @@
 <template>
   <section class="search_results">
 
-    <!-- 🔥 로딩 -->
-    <BaseLoader v-if="isLoading" />
-
-    <!-- 🔥 에러 -->
+    <BaseLoader v-if="isLoadingInitial" />
     <BaseError v-else-if="isError" :message="errorMessage" />
+    <template v-else>
+      <p v-if="movies.length" class="result_count sb">
+        "{{ props.keyword }}" 검색 결과: {{ movies.length }}건
+      </p>
 
-    <!-- 🔥 결과 있음 -->
-    <div v-else-if="movies.length">
-      <MovieItem
-        v-for="movie in movies"
-        :key="movie.id"
-        :movie="movie"
-        :genresMap="genresMapActive"
-        @open-modal="$emit('open-modal', $event)"
-      />
-    </div>
+      <div v-if="movies.length">
+        <MovieGrid
+          :items="movies"
+          :genresMap="genresMapActive"
+          :keyword="props.keyword"
+          @open-modal="$emit('open-modal', $event)"
+        />
 
-    <!-- 🔥 결과 없음 -->
-    <div v-else>
-      <font-awesome-icon :icon="['fas', 'ban']" />
-      <p>검색 결과가 없습니다.</p>
-    </div>
+        <div v-if="isLoadingMore" class="load-more-box">
+          <BaseLoader small />
+        </div>
+
+        <div ref="sentinel" class="sentinel"></div>
+      </div>
+
+      <!-- 5) 결과 없음 -->
+      <div v-else>
+        <font-awesome-icon :icon="['fas', 'ban']" />
+        <p>검색 결과가 없습니다.</p>
+      </div>
+
+    </template>
 
   </section>
 </template>
 
+
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { searchMovies } from '../api/tmdb'
-import MovieItem from './MovieItem.vue'
+import MovieGrid from './movies/MovieGrid.vue'
 import BaseLoader from './common/BaseLoader.vue'
 import BaseError from './common/BaseError.vue'
 import { useGenres } from '../composables/useGenres'
 
 const emit = defineEmits(['open-modal'])
-
 const { genresMapActive } = useGenres()
 
 const props = defineProps({
   keyword: String,
 })
 
+/* -------------------------- 상태 -------------------------- */
 const movies = ref([])
-const isLoading = ref(false)
+const page = ref(1)
+const totalPages = ref(1)
+
+const isLoadingInitial = ref(false)
+const isLoadingMore = ref(false)
 const isError = ref(false)
 const errorMessage = ref('')
 
-const fetchResults = async () => {
+const sentinel = ref(null)
+let observer = null
+
+/* --------------------- 검색 API -------------------- */
+const fetchMovies = async (reset = false) => {
   if (!props.keyword) return
 
-  const MIN_LOADING = 400
-  const start = Date.now()
-
-  isLoading.value = true
-  isError.value = false
-  errorMessage.value = ''
+  if (reset) {
+    movies.value = []
+    page.value = 1
+    totalPages.value = 1
+    isLoadingInitial.value = true
+    isError.value = false
+  }
 
   try {
-    const res = await searchMovies(props.keyword)
-    movies.value = res.data.results
+    const res = await searchMovies(props.keyword, page.value)
+    totalPages.value = res.data.total_pages
+
+    if (reset) {
+      movies.value = res.data.results
+    } else {
+      movies.value = [...movies.value, ...res.data.results]
+    }
+
   } catch (err) {
     console.error(err)
     isError.value = true
     errorMessage.value = '검색 결과를 불러오지 못했습니다.'
   } finally {
-    const elapsed = Date.now() - start
-    const wait = Math.max(0, MIN_LOADING - elapsed)
-    await new Promise(r => setTimeout(r, wait))
-    isLoading.value = false
-    console.log('[SearchResults] isLoading 끝, elapsed:', elapsed, 'ms')
+    if (reset) isLoadingInitial.value = false
+    else isLoadingMore.value = false
   }
 }
 
-onMounted(fetchResults)
-watch(() => props.keyword, fetchResults)
+/* ------------------ IntersectionObserver ------------------ */
+const setupObserver = () => {
+  if (observer) observer.disconnect()
+
+  observer = new IntersectionObserver(entries => {
+    const entry = entries[0]
+    if (entry.isIntersecting && !isLoadingMore.value) {
+      if (page.value < totalPages.value) {
+        page.value++
+        isLoadingMore.value = true
+        fetchMovies()
+      }
+    }
+  })
+
+  if (sentinel.value) observer.observe(sentinel.value)
+}
+
+onMounted(() => {
+  fetchMovies(true)
+  setupObserver()
+  nextTick(() => {
+    const el = document.querySelector('.search_results')
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  })
+})
+
+watch(() => props.keyword, () => {
+  fetchMovies(true)
+})
+
+onBeforeUnmount(() => {
+  if (observer) observer.disconnect()
+})
 </script>
 
 <style scoped lang="scss">
 @import '../assets/searchresult.scss';
+
+
 </style>

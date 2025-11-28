@@ -16,7 +16,8 @@
             :alt="movie.poster_path ? movie.title : ''"
         />
         <div class="movie_overlay" v-show="hover">
-            <h3 class="big sb">{{ movie.title }}</h3>
+            <!-- <h3 class="big sb" >{{ movie.title }}</h3> -->
+            <h3 class="big sb" v-html="highlightedTitle"></h3>
             <div class="movie_text">
                 <p class="text n">{{ genreNames.join(', ') }} | {{ releaseYear }}</p>
                 <p class="text n">⭐ {{ movie.vote_average }}</p>
@@ -41,7 +42,15 @@ const props = defineProps({
     movie: Object,
     genresMap: Object,  
     index: Number,
-    endpoint: String, 
+    endpoint: String,
+    keyword: String
+})
+
+const highlightedTitle = computed(() => {
+  if (!props.keyword) return props.movie.title
+
+  const regex = new RegExp(`(${props.keyword})`, 'gi')
+  return props.movie.title.replace(regex, `<mark>$1</mark>`)
 })
 
 const hover = ref(false)

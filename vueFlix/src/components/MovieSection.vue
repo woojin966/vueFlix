@@ -1,14 +1,10 @@
 <template>
-  <section class="movie_section">
+  <section class="movie_section" ref="sectionRef">
     <h2 class="sb">{{ title }}</h2>
 
-    <!-- 🔥 로딩 -->
     <BaseLoader v-if="isLoading" />
-
-    <!-- 🔥 에러 -->
     <BaseError v-else-if="isError" :message="errorMessage" />
 
-    <!-- 🔥 정상 목록 -->
     <Swiper
       v-else
       :modules="[Navigation]"
@@ -38,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
@@ -69,6 +65,8 @@ const movies = ref([])
 const isLoading = ref(false)
 const isError = ref(false)
 const errorMessage = ref('')
+const isVisible = ref(false)
+const sectionRef = ref(null)
 
 const { genresMapActive } = useGenres()
 
@@ -93,7 +91,21 @@ const swiperBreakpoints = {
   1900: { slidesPerView: 5, spaceBetween: 20 },
 }
 
-onMounted(async () => {
+onMounted(() => {
+  const observer = new IntersectionObserver(entries => {
+    const entry = entries[0]
+    if (entry.isIntersecting) {
+      isVisible.value = true
+      observer.disconnect()
+    }
+  }, { threshold: 0.2 })
+
+  if (sectionRef.value) observer.observe(sectionRef.value)
+})
+
+watch(isVisible, async (visible) => {
+  if (!visible) return
+
   const MIN_LOADING = 400
   const start = Date.now()
 
@@ -121,8 +133,8 @@ onMounted(async () => {
       swiperRef.value.swiper.navigation.init()
       swiperRef.value.swiper.navigation.update()
     }
+
   } catch (err) {
-    console.error(err)
     isError.value = true
     errorMessage.value = '영화 데이터를 불러오지 못했습니다.'
   } finally {
@@ -130,7 +142,6 @@ onMounted(async () => {
     const wait = Math.max(0, MIN_LOADING - elapsed)
     await new Promise(r => setTimeout(r, wait))
     isLoading.value = false
-    console.log('[MovieSection] isLoading 끝, elapsed:', elapsed, 'ms')
   }
 })
 </script>

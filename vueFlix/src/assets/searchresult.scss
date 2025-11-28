@@ -22,10 +22,10 @@
         }
     }
     @media all and (max-width: 1280px){
-        padding: 28px 40px 60px;
+        padding: 28px 40px 0;
     }
     @media all and (max-width: 1024px){
-        padding: 20px 20px 60px;
+        padding: 20px 20px 0;
         > div{
             gap: 60px 16px;
             .movie_item{
@@ -34,14 +34,34 @@
         }
     }
     @media all and (max-width: 840px){
+        padding: 20px 20px 60px;
         > div{
+            justify-content: center; gap: 0;
             .movie_item{
                 width: 100%;
             }
         }
     }
     @media all and (max-width: 480px){
-        padding: 72px 16px 40px;
-        > div{gap: 40px 12px;}
+        padding: 20px 16px 40px;
     }
+}
+
+.load-more-box {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+.sentinel {
+  height: 40px;
+}
+.result_count {
+  margin-bottom: 40px; font-size: 24px;
+  @media all and (max-width: 840px){
+    font-size: 4.4vw;
+  }
+  @media all and (max-width: 480px){
+    margin-bottom: 20px;
+    font-size: 6.4vw;
+  }
 }
