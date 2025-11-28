@@ -35,7 +35,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useVotes } from '../composables/useVotes'
 import ThumbsButton from './ThumbsButton.vue'
 
 const props = defineProps({ 
@@ -46,14 +47,31 @@ const props = defineProps({
     keyword: String
 })
 
+//  좋아요, 싫어요 관련
+const { getVote } = useVotes()
+const voteState = computed(() => getVote(props.movie.id))
+
+const STORAGE_KEY = 'vueflix-votes'
+const voteKey = `movie-${props.movie.id}`
+
+onMounted(() => {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+  voteState.value = saved[voteKey] || null
+})
+
+const handleVoteChanged = (newVote) => {
+  voteState.value = newVote
+}
+
+// ui관련
+const hover = ref(false)
+
 const highlightedTitle = computed(() => {
   if (!props.keyword) return props.movie.title
 
   const regex = new RegExp(`(${props.keyword})`, 'gi')
   return props.movie.title.replace(regex, `<mark>$1</mark>`)
 })
-
-const hover = ref(false)
 
 const releaseYear = computed(() => 
     props.movie.release_date 

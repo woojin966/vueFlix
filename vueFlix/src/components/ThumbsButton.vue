@@ -1,81 +1,55 @@
 <template>
     <div class="thumbs">
-        <button type="button" class="text thumbs_btn up" :class="{'voted' : upVoted}" @click="handleClick('up')">
+        <button type="button" class="text thumbs_btn up" :class="{'voted' : upVoted}" @click.stop="handleClick('up')">
             <font-awesome-icon :icon="upVoted ? ['fas', 'thumbs-up'] : ['far', 'thumbs-up']" />
         </button>
-        <button type="button" class="text thumbs_btn down" :class="{'voted' : downVoted}" @click="handleClick('down')">
+        <button type="button" class="text thumbs_btn down" :class="{'voted' : downVoted}" @click.stop="handleClick('down')">
             <font-awesome-icon :icon="downVoted ? ['fas', 'thumbs-down'] : ['far', 'thumbs-down']" />
         </button>
     </div>
 </template>
 
 <script setup>
-    import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
+import { useVotes } from '../composables/useVotes'
 
-    const props = defineProps({
-        movieId: Number,
-        movieTitle: String,
-    })
-    const emit = defineEmits(['notify', 'vote-changed'])
+const props = defineProps({
+  movieId: Number,
+  movieTitle: String,
+})
 
-    const STORAGE_KEY = 'vueflix-votes'
-    const voteKey = `movie-${props.movieId}`
-    const upVoted = ref(false)
-    const downVoted = ref(false)
+const { getVote, setVote } = useVotes()
 
-    const handleClick = (type) => {
-        const savedVotes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+// upVoted / downVoted를 computed로!
+const upVoted = computed(() => getVote(props.movieId) === 'up')
+const downVoted = computed(() => getVote(props.movieId) === 'down')
 
-        if (type === 'up') {
-            if (upVoted.value) {
-                upVoted.value = false
-                delete savedVotes[voteKey]
-                emit('notify', {
-                    icon: ['far', 'thumbs-up'],
-                    message: `'${props.movieTitle}' 좋아요가 취소되었습니다.`,
-                })
-            } else {
-                upVoted.value = true
-                downVoted.value = false
-                savedVotes[voteKey] = 'up'
-                emit('notify', {
-                    icon: ['fas', 'thumbs-up'],
-                    message: `'${props.movieTitle}' 영화 평점에 반영되었습니다.`,
-                })
-            }
-        } else if (type === 'down') {
-            if (downVoted.value) {
-                downVoted.value = false
-                delete savedVotes[voteKey]
-                emit('notify', {
-                    icon: ['far', 'thumbs-down'],
-                    message: `'${props.movieTitle}' 싫어요가 취소되었습니다.`,
-                })
-            } else {
-                downVoted.value = true
-                upVoted.value = false
-                savedVotes[voteKey] = 'down'
-                emit('notify', {
-                    icon: ['fas', 'thumbs-down'],
-                    message: `'${props.movieTitle}' 영화 평점에 반영되었습니다.`,
-                })
-            }
-        }
+const emit = defineEmits(['notify'])
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(savedVotes))
-        emit('vote-changed', savedVotes[voteKey] || null)
-    }
+const handleClick = (type) => {
+  let newVote = null
 
-    onMounted(() => {
-        const savedVotes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-        if (savedVotes[voteKey] === 'up') {
-            upVoted.value = true
-            downVoted.value = false
-        } else if (savedVotes[voteKey] === 'down') {
-            downVoted.value = true
-            upVoted.value = false
-        }
-    })
+  if (type === 'up') {
+    newVote = upVoted.value ? null : 'up'
+  } else {
+    newVote = downVoted.value ? null : 'down'
+  }
+
+  setVote(props.movieId, newVote)
+
+  // 알림
+  emit('notify', {
+    icon: newVote === 'up' ? ['fas', 'thumbs-up'] :
+          newVote === 'down' ? ['fas', 'thumbs-down'] :
+          type === 'up' ? ['far', 'thumbs-up'] : ['far', 'thumbs-down'],
+    message:
+      newVote === 'up'
+        ? `'${props.movieTitle}' 좋아요가 반영되었습니다.`
+        : newVote === 'down'
+        ? `'${props.movieTitle}' 싫어요가 반영되었습니다.`
+        : `'${props.movieTitle}' 평가가 취소되었습니다.'`
+  })
+}
 </script>
 
 <style scoped lang="scss">
