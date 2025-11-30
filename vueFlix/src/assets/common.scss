@@ -10,7 +10,6 @@ h3{font-size: 20px;}
 .text{font-size: 16px;}
 .small{font-size: 12px;}
 .mini{font-size: 10px;}
-.bb{font-weight: bolder;}
 .b{font-weight: bold;}
 .sb{font-weight: 600;}
 .mb{font-weight: 500;}
@@ -41,5 +40,5 @@ h3{font-size: 20px;}
     .text{font-size: 4.8vw;}
 }
 
-.body_wrap{font-family: $mainFont; line-height: 1.4; background-color: #000; color: #fff;}
+.body_wrap{font-family: $mainFont; line-height: 1.4; background-color: #000; color: #fff; overflow-x: hidden;}
 button{cursor: pointer;}

@@ -1,8 +1,8 @@
 <template>
     <div 
-        :class="['movie_item', { popular: endpoint === '/movie/popular' }]" 
-        @mouseenter="hover = true" 
-        @mouseleave="hover = false"
+        :class="['movie_item', { popular: endpoint === '/movie/popular', hovering: hover }]" 
+        @mouseenter="onEnter"
+        @mouseleave="onLeave"
         @click="$emit('open-modal', movie)"
     >
         <p v-if="endpoint === '/movie/popular'" :class="['popular_num bb', `num_${index}`]">{{ index + 1 }}</p>
@@ -65,6 +65,16 @@ const handleVoteChanged = (newVote) => {
 
 // ui관련
 const hover = ref(false)
+const canHover = window.matchMedia('(hover: hover)').matches
+
+const onEnter = () => {
+    if (!canHover) return  
+    hover.value = true
+}
+const onLeave = () => {
+    if (!canHover) return
+    hover.value = false
+}
 
 const highlightedTitle = computed(() => {
   if (!props.keyword) return props.movie.title

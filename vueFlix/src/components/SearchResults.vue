@@ -1,6 +1,5 @@
 <template>
-  <section class="search_results">
-
+  <section class="search_results" ref="searchRef">
     <BaseLoader v-if="isLoadingInitial" />
     <BaseError v-else-if="isError" :message="errorMessage" />
     <template v-else>
@@ -63,7 +62,10 @@ const errorMessage = ref('')
 const sentinel = ref(null)
 let observer = null
 
+const searchRef = ref(null)
+
 /* --------------------- 검색 API -------------------- */
+window.scrollTo({ top: 0, behavior: 'smooth' })
 const fetchMovies = async (reset = false) => {
   if (!props.keyword) return
 
@@ -81,6 +83,13 @@ const fetchMovies = async (reset = false) => {
 
     if (reset) {
       movies.value = res.data.results
+
+      nextTick(() => {
+    if (searchRef.value) {
+      const top = searchRef.value.offsetTop
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  })
     } else {
       movies.value = [...movies.value, ...res.data.results]
     }
@@ -119,11 +128,14 @@ onMounted(() => {
   nextTick(() => {
     const el = document.querySelector('.search_results')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
+    // document.querySelector('.search_results')
+    //   ?.scrollIntoView({ behavior: 'smooth' })
   })
 })
 
 watch(() => props.keyword, () => {
   fetchMovies(true)
+  emit('close-all-modals')
 })
 
 onBeforeUnmount(() => {

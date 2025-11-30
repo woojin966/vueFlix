@@ -5,7 +5,11 @@
       @update:keyword="keyword = $event"  
       v-model:keyword="keyword">
     </Header>
-    <MainBanner></MainBanner>
+    <MainBanner 
+      v-if="!keyword" 
+      :active="keyword !== ''"
+      @update:keyword="keyword = $event"  
+    ></MainBanner>
     <SearchResults 
       v-if="keyword" 
       :keyword="keyword" 

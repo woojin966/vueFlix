@@ -1,5 +1,5 @@
 <template>
-  <section class="movie_section" ref="sectionRef">
+  <section class="movie_section" :class="{ 'fade_grid': loadedOnce }" ref="sectionRef">
     <h2 class="sb">{{ title }}</h2>
 
     <BaseLoader v-if="isLoading" />
@@ -67,6 +67,7 @@ const isError = ref(false)
 const errorMessage = ref('')
 const isVisible = ref(false)
 const sectionRef = ref(null)
+const loadedOnce = ref(false)
 
 const { genresMapActive } = useGenres()
 
@@ -104,9 +105,9 @@ onMounted(() => {
 })
 
 watch(isVisible, async (visible) => {
-  if (!visible) return
+  if (!visible || loadedOnce.value) return
 
-  const MIN_LOADING = 400
+  const MIN_LOADING = 800
   const start = Date.now()
 
   isLoading.value = true
@@ -127,6 +128,7 @@ watch(isVisible, async (visible) => {
     }
 
     movies.value = res.data.results
+    loadedOnce.value = true
 
     await nextTick()
     if (swiperRef.value?.swiper) {
