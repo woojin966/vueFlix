@@ -6,9 +6,9 @@
       v-model:keyword="keyword">
     </Header>
     <MainBanner 
-      v-if="!keyword" 
       :active="keyword !== ''"
-      @update:keyword="keyword = $event"  
+      @update:keyword="keyword = $event"
+      ref="bannerRef"  
     ></MainBanner>
     <SearchResults 
       v-if="keyword" 
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, provide  } from 'vue'
   import Header from './components/Header.vue'
   import MainBanner from './components/MainBanner.vue'
   import SearchResults from './components/SearchResults.vue'
@@ -51,6 +51,9 @@ import { useGenres } from './composables/useGenres'
   const headerRef = ref(null)
   const selectedMovie = ref(null)
   const showModal = ref(false)  
+  const bannerRef = ref(null)
+
+  provide('bannerRef', bannerRef)
 
   const handleNotify = (notice) => {
     headerRef.value?.addNotification(notice)

@@ -23,9 +23,9 @@
       </div>
 
       <!-- 5) 결과 없음 -->
-      <div v-else>
+      <div v-else class="no_search">
         <font-awesome-icon :icon="['fas', 'ban']" />
-        <p>검색 결과가 없습니다.</p>
+        <p class="big sb">검색 결과가 없습니다.</p>
       </div>
 
     </template>
@@ -86,8 +86,13 @@ const fetchMovies = async (reset = false) => {
 
       nextTick(() => {
     if (searchRef.value) {
-      const top = searchRef.value.offsetTop
-      window.scrollTo({ top, behavior: 'smooth' })
+      // const top = searchRef.value.offsetTop
+      // window.scrollTo({ top, behavior: 'smooth' })
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
     }
   })
     } else {
@@ -125,12 +130,11 @@ const setupObserver = () => {
 onMounted(() => {
   fetchMovies(true)
   setupObserver()
-  nextTick(() => {
-    const el = document.querySelector('.search_results')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-    // document.querySelector('.search_results')
-    //   ?.scrollIntoView({ behavior: 'smooth' })
-  })
+  // nextTick(() => {
+  //   // const el = document.querySelector('')
+  //   // if (el) el.scrollIntoView({ behavior: 'smooth' })
+    
+  // })
 })
 
 watch(() => props.keyword, () => {

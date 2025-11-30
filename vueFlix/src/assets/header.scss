@@ -1,5 +1,5 @@
 .header_article{
-    position: sticky; top: 0; left: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 8px 60px; background-color: #000; color: #fff; height: 56px;
+    position: fixed; top: 0; left: 0; z-index: 11; display: flex; align-items: center; justify-content: space-between; padding: 8px 60px; background-color: #000; color: #fff; height: 56px; width: 100%;
     .logo_btn{
         img{height: 24px; width: auto;}
     }
@@ -12,9 +12,6 @@
     }
     .searchbar_btn_section{
         display: flex; align-items: center; gap: 20px;
-        .searchbar_box{
-            display: flex; gap: 8px;
-        }
         .header_btn_box{
             display: flex; align-items: center; gap: 20px;
             .popup{
@@ -50,60 +47,17 @@
         }
     }
     @media all and (max-width: 1440px){
-        .searchbar_btn_section{
-            .header_btn_box{
-                .popup{
-                    &.alarm_box{width: 24vw;}
-                }
-            }
-        }
     }
     @media all and (max-width: 1280px){
         padding: 8px 40px;
-        .searchbar_btn_section{
-            .header_btn_box{
-                .popup{
-                    &.alarm_box{width: 28vw;}
-                }
-            }
-        }
     }
     @media all and (max-width: 1024px){
         padding: 8px 20px;
-        .searchbar_btn_section{
-            .header_btn_box{
-                .popup{
-                    &.alarm_box{width: 32vw;}
-                }
-            }
-        }
     }
     @media all and (max-width: 840px){
-        .searchbar_btn_section{
-            .header_btn_box{
-                .popup{
-                    &.alarm_box{
-                        width: 60vw;
-                        svg{font-size: 3.2vw !important; margin-top: 4px !important;}
-                    }
-                }
-            }
-        }
     }
     @media all and (max-width: 480px){
         padding: 8px 16px; width: 100%; 
-        .searchbar_btn_section .searchbar_box{order: 2;}
-        .searchbar_btn_section{
-            .header_btn_box{
-                .popup{
-                    width: calc(100% - 32px) !important; left: 16px !important; position: fixed; top: 60px;
-                    &.alarm_box{
-                        width: 60vw;
-                        svg{font-size: 5vw !important;}
-                    }
-                }
-            }
-        }
     }
 }
 

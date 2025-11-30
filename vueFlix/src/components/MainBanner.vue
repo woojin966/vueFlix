@@ -6,28 +6,41 @@
     ></div>
     <div class="hero_text_box">
       <h1 class="hero_title b">VUEFLIX</h1>
-      <p class="hero_subtitle big b">Browse popular movies with TMDB API</p>
-      <SearchBar @update:keyword="emit('update:keyword', $event)" />
+      <p class="hero_subtitle big b">Browse popular movies <br class="mo_blk" />with TMDB API</p>
+      <SearchBar @update:keyword="emit('update:keyword', $event)" ref="searchBarRef" />
       <!-- <button class="hero_cta medium" @click="scrollToMovies">
         Browse Movies
       </button> -->
     </div>
     <div class="hero-slider">
-      <Swiper
+      <!-- <Swiper
         v-if="popularMovies.length"
         :modules="[Autoplay, Pagination]"
         :loop="true"
         :autoplay="{ delay: 7000, disableOnInteraction: false }"
         :pagination="{ clickable: true }"
+        :slides-per-view="1"
+        :space-between="0"
         class="hero-swiper"
         @slideChange="onSlideChange"
-      >
+    > -->
+    <Swiper
+        v-if="popularMovies.length"
+        :modules="[Autoplay, Pagination]"
+        :loop="true"
+        :pagination="{ clickable: true }"
+        :slides-per-view="1"
+        :space-between="0"
+        class="hero-swiper"
+        @slideChange="onSlideChange"
+    >
         <SwiperSlide
           v-for="movie in popularMovies"
           :key="movie.id"
         >
           <div class="slide_content">
-            <h2 class="movie_title bb">{{ movie.title }}</h2>
+            <img :src="posterUrlForBanner(movie.poster_path)" :alt="movie.title" />
+            <h2 class="movie_title medium b">{{ movie.title }}</h2>
             <p class="movie_overview text n">{{ movie.overview || '설명이 없습니다.' }}</p>
           </div>
         </SwiperSlide>
@@ -38,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed  } from 'vue'
 import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Pagination } from 'swiper/modules'
@@ -74,7 +87,17 @@ const onSlideChange = (swiper) => {
 //   }
 // }
 
+const searchBarRef = ref(null)
+
+const resetSearch = () => {
+  searchBarRef.value?.clearInput()
+}
+
+defineExpose({ resetSearch })
+
 // TMDB 인기 영화 불러오기
+const posterUrlForBanner = (path) =>
+  `https://image.tmdb.org/t/p/w500${path}`
 const fetchPopular = async () => {
   const res = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
@@ -82,7 +105,7 @@ const fetchPopular = async () => {
       language: 'ko-KR',
     }
   })
-
+  
   popularMovies.value = res.data.results.slice(0, 10)
 }
 

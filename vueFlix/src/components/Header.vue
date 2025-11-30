@@ -1,7 +1,7 @@
 <template>
   <article class="header_article">
     <section class="logo_section">
-      <a href="javascript:void(0)" class="logo_btn" @click="handleLogoClick">
+      <a href="javascript:void(0)" class="logo_btn" @click="closeSearch">
         <img src="../data/vueflix.svg" alt="logo">
       </a>
     </section>
@@ -68,8 +68,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useGenres } from '../composables/useGenres'
+
+const bannerRef = inject('bannerRef')
 
 // 🔥 emit 먼저
 const emit = defineEmits(['update:keyword', 'clear-votes'])
@@ -123,6 +125,24 @@ const showProfile = ref(false)
 const toggleProfile = () => {
   showProfile.value = !showProfile.value
   showAlarm.value = false
+}
+
+// 검색어 비우기
+const showSearch = ref(false)
+const searchBarRef = ref(null)
+
+const closeSearch = () => {
+  showSearch.value = false
+  bannerRef.value?.resetSearch()
+
+  // SearchBar input 비우기
+  if (searchBarRef.value?.clearInput) {
+    searchBarRef.value.clearInput()
+  }
+
+  emit('update:keyword', '')
+
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 </script>
 
