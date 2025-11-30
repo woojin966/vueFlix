@@ -4,10 +4,15 @@
         img{height: 24px; width: auto;}
     }
     button{
-        color: #fff; font-size: 16px;
+        color: #fff; 
         &.has_alarm{
             position: relative;
             &::before{content: ''; position: absolute; top: -4px; right: -4px; width: 6px; height: 6px; border-radius: 4px; background-color: $point;}
+        }
+        &.profile_btn{cursor: not-allowed;}
+        &.alarm_btn, &.profile_btn{font-size: 24px;}
+        @media all and (max-width: 480px){
+            &.alarm_btn, &.profile_btn{font-size: 20px;}
         }
     }
     .searchbar_btn_section{
@@ -15,7 +20,7 @@
         .header_btn_box{
             display: flex; align-items: center; gap: 20px;
             .popup{
-                position: absolute; top: 44px; right: -8px; background-color: #000; z-index: 10; border-bottom: 2px solid #fff; gap: 0;
+                position: absolute; top: 60px; right: -8px; background-color: #000; z-index: 10; border-bottom: 2px solid #fff; gap: 0;
                 &::before{content: ""; position: absolute; top: -12px; z-index: 10; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid #000; display: none;}
                 &.alarm_box{
                     &::before{right: 40px;}
@@ -23,6 +28,15 @@
                     &::-webkit-scrollbar-track {background: transparent;}
                     &::-webkit-scrollbar-thumb {background: $gray; border-radius: 10px;}
                     width: 20vw; height: 200px; overflow-y: auto;
+                    @media all and (max-width: 1024px){
+                        width: 52vw;
+                    }
+                    @media all and (max-width: 840px){
+                        width: 64vw;
+                    }
+                    @media all and (max-width: 480px){
+                        width: calc(100vw - 32px); right: 0;
+                    }
                     ul{
                         width: 100%;
                         li{
@@ -53,11 +67,21 @@
     }
     @media all and (max-width: 1024px){
         padding: 8px 20px;
+        .searchbar_btn_section{
+            .header_btn_box{
+                gap: 12px;
+                .popup{top: 52px;}
+            }
+        }
+        
     }
     @media all and (max-width: 840px){
     }
     @media all and (max-width: 480px){
         padding: 8px 16px; width: 100%; 
+        .searchbar_btn_section{
+            .header_btn_box{gap: 8px;}
+        }
     }
 }
 
@@ -68,8 +92,8 @@
   button {
     background: transparent;
     border: 1px solid #888;
-    padding: 4px 8px;
-    font-size: 12px;
+    padding: 12px 16px;
+    font-size: 16px;
     color: #ddd;
     border-radius: 4px;
     cursor: pointer;
@@ -80,5 +104,9 @@
       border-color: #fff;
       font-weight: 600;
     }
+    @media all and (max-width: 480px){
+    font-size: 14px; padding: 8px 12px;
   }
 }
+  }
+  

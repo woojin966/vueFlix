@@ -25,7 +25,7 @@
       <!-- 5) 결과 없음 -->
       <div v-else class="no_search">
         <font-awesome-icon :icon="['fas', 'ban']" />
-        <p class="big sb">검색 결과가 없습니다.</p>
+        <p class="big sb">{{ t("no_result") }}</p>
       </div>
 
     </template>
@@ -41,6 +41,9 @@ import MovieGrid from './movies/MovieGrid.vue'
 import BaseLoader from './common/BaseLoader.vue'
 import BaseError from './common/BaseError.vue'
 import { useGenres } from '../composables/useGenres'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const emit = defineEmits(['open-modal'])
 const { genresMapActive } = useGenres()

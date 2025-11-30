@@ -59,6 +59,7 @@ const props = defineProps({
   title: String,
   endpoint: String,
   limit: { type: Number, default: 20 },
+  currentLang: String,   // 🔥 추가됨!!
 })
 
 const movies = ref([])
@@ -92,7 +93,7 @@ const swiperBreakpoints = {
   1900: { slidesPerView: 5, spaceBetween: 20 },
 }
 
-onMounted(() => {
+function setupObserver() {
   const observer = new IntersectionObserver(entries => {
     const entry = entries[0]
     if (entry.isIntersecting) {
@@ -102,6 +103,18 @@ onMounted(() => {
   }, { threshold: 0.2 })
 
   if (sectionRef.value) observer.observe(sectionRef.value)
+}
+
+onMounted(() => {
+  setupObserver()
+})
+
+watch(() => props.currentLang, async () => {
+  loadedOnce.value = false
+  isVisible.value = false
+
+  await nextTick()
+  setupObserver()
 })
 
 watch(isVisible, async (visible) => {
@@ -118,13 +131,10 @@ watch(isVisible, async (visible) => {
     let res
 
     if (props.endpoint.startsWith('/discover/movie')) {
-      res = await fetchByEndpoint(props.endpoint)
+      res = await fetchByEndpoint(props.endpoint, props.currentLang)
     } else {
       const apiFn = apiMap[props.endpoint]
-      if (!apiFn) {
-        throw new Error(`Invalid endpoint: ${props.endpoint}`)
-      }
-      res = await apiFn()
+      res = await apiFn(props.currentLang)
     }
 
     movies.value = res.data.results

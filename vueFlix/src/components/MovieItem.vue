@@ -1,6 +1,13 @@
 <template>
     <div 
-        :class="['movie_item', { popular: endpoint === '/movie/popular', hovering: hover }]" 
+        :class="[
+          'movie_item',
+          { 
+            popular: endpoint === '/movie/popular',
+            hovering: hover,
+            voted: voteState !== null   
+          }
+        ]" 
         @mouseenter="onEnter"
         @mouseleave="onLeave"
         @click="$emit('open-modal', movie)"
@@ -28,16 +35,19 @@
                     :movie-title="movie.title"
                     @notify="$emit('notify', $event)"
                 />
-                <button type="button" class="text mb movie_detail_btn" @click.stop="$emit('open-modal', movie)">상세</button>
+                <button type="button" class="text mb movie_detail_btn" @click.stop="$emit('open-modal', movie)">{{ t("detail") }}</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useVotes } from '../composables/useVotes'
 import ThumbsButton from './ThumbsButton.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const props = defineProps({ 
     movie: Object,
@@ -47,21 +57,11 @@ const props = defineProps({
     keyword: String
 })
 
-//  좋아요, 싫어요 관련
+//  👍 좋아요, 싫어요 관련 (중앙 스토어만 사용)
 const { getVote } = useVotes()
+
+// 🔥 이 값만 믿는다. set은 절대 하지 않음!
 const voteState = computed(() => getVote(props.movie.id))
-
-const STORAGE_KEY = 'vueflix-votes'
-const voteKey = `movie-${props.movie.id}`
-
-onMounted(() => {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-  voteState.value = saved[voteKey] || null
-})
-
-const handleVoteChanged = (newVote) => {
-  voteState.value = newVote
-}
 
 // ui관련
 const hover = ref(false)
@@ -96,6 +96,8 @@ const genreNames = computed(() => {
         .filter(Boolean)
 })
 </script>
+
+
 
 
 <style scoped lang="scss">

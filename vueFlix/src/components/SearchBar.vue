@@ -1,25 +1,23 @@
 <template>
     <article class="searchbar_article">
         <div>
-            <input type="text" placeholder="제목으로 검색" v-model="keyword" @input="onInput" />
+            <input type="text" :placeholder="t('search_placeholder')" v-model="keyword" @input="onInput" />
             <div>
                 <button @click="clearInput" class="search_close_btn">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
                 </button>
-        <button @click="onInput">검색</button>
+                <button @click="onInput">{{ t("search") }}</button>
             </div>
         </div>
-            
-             
-
-        
-        
     </article>
-    
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n({ useScope: 'global' })
+
 const emit = defineEmits(['update:keyword'])
 const keyword = ref('')
 

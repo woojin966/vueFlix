@@ -1,47 +1,39 @@
 // src/api/tmdb.js
 import axios from 'axios'
 
-const apiKey = 'fcc17cdaa94f35e5e1cf80b2de9ea4e7'
+const API_KEY = import.meta.env.VITE_TMDB_KEY
+const BASE_URL = 'https://api.themoviedb.org/3'
 
 export const client = axios.create({
-  baseURL: 'https://api.themoviedb.org/3',
+  baseURL: BASE_URL,
   params: {
-    api_key: apiKey,
-    language: 'ko-KR',  // 기본 한국어
-  }
+    api_key: API_KEY,
+  },
 })
 
-// 기본 API 함수들
-export function getPopularMovies(page = 1) {
-  return client.get('/movie/popular', { params: { page } })
+export function getLanguageParam(lang = 'ko') {
+  return lang === 'en' ? 'en-US' : 'ko-KR'
 }
 
-export function getNowPlaying(page = 1) {
-  return client.get('/movie/now_playing', { params: { page } })
-}
-
-export function getUpcomingMovies(page = 1) {
-  return client.get('/movie/upcoming', { params: { page } })
-}
-
-export function getTopRatedMovies(page = 1) {
-  return client.get('/movie/top_rated', { params: { page } })
-}
-
-export function searchMovies(query, page = 1) {
-  return client.get('/search/movie', {
-    params: { query, page },
+export function get(url, params = {}, lang = 'ko') {
+  return client.get(url, {
+    params: {
+      api_key: API_KEY,
+      language: getLanguageParam(lang),
+      ...params,
+    },
   })
 }
 
-export function getGenres() {
-  return client.get('/genre/movie/list', {
-    params: {
-      language: 'en-US',   
-    },
-  });
-}
+export const getPopularMovies = (lang) => get('/movie/popular', {}, lang)
+export const getUpcomingMovies = (lang) => get('/movie/upcoming', {}, lang)
+export const getTopRatedMovies = (lang) => get('/movie/top_rated', {}, lang)
+export const getNowPlaying = (lang) => get('/movie/now_playing', {}, lang)
 
-export function fetchByEndpoint(endpoint) {
-  return client.get(endpoint)
-}
+export const fetchByEndpoint = (endpoint, lang) => get(endpoint, {}, lang)
+
+export const searchMovies = (query, page = 1, lang) =>
+  get('/search/movie', { query, page }, lang)
+
+export const getGenres = (lang) =>
+  get('/genre/movie/list', {}, lang)

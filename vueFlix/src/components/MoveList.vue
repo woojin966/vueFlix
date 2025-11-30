@@ -1,92 +1,123 @@
 <template>
-    <article class="movie_article">
-        <MovieSection
-            title="인기 영화"
-            endpoint="/movie/popular"
-            :genreMap="genreMap"
-            class="popular"
-            :limit="10"
-            @notify="$emit('notify', $event)"
-            @open-modal="$emit('open-modal', $event)"
-        />
-        <MovieSection 
-            title="현재 상영 중" 
-            endpoint="/movie/now_playing" 
-            :genreMap="genreMap"
-            @notify="$emit('notify', $event)"
-            @open-modal="$emit('open-modal', $event)"
-        />
-        <MovieSection 
-            title="상영 예정" 
-            endpoint="/movie/upcoming" 
-            :genreMap="genreMap"
-            @notify="$emit('notify', $event)"
-            @open-modal="$emit('open-modal', $event)"
-        />
-        <MovieSection 
-            title="평점 높은 영화" 
-            endpoint="/movie/top_rated"  
-            :genreMap="genreMap"
-            @notify="$emit('notify', $event)"
-            @open-modal="$emit('open-modal', $event)"
-        />
-        <!-- 무한 스크롤로 추가되는 장르 섹션 -->
-        <MovieSection 
-            v-for="section in genreSections"
-            :key="section.id"
-            :title="section.name"
-            :endpoint="section.endpoint"
-            :genreMap="genreMap"
-            @notify="$emit('notify', $event)"
-            @open-modal="$emit('open-modal', $event)"
-        />
-    </article>
+  <article class="movie_article">
+    
+    <!-- 기본 섹션들 -->
+    <MovieSection
+      :title="titles[currentLang].popular"
+      endpoint="/movie/popular"
+      :genreMap="genreMap"
+      :currentLang="currentLang"
+      class="popular"
+      :limit="10"
+      @notify="$emit('notify', $event)"
+      @open-modal="$emit('open-modal', $event)"
+    />
+
+    <MovieSection 
+      :title="titles[currentLang].now_playing"
+      endpoint="/movie/now_playing"
+      :genreMap="genreMap"
+      :currentLang="currentLang"
+      @notify="$emit('notify', $event)"
+      @open-modal="$emit('open-modal', $event)"
+    />
+
+    <MovieSection 
+      :title="titles[currentLang].upcoming"
+      endpoint="/movie/upcoming"
+      :genreMap="genreMap"
+      :currentLang="currentLang"
+      @notify="$emit('notify', $event)"
+      @open-modal="$emit('open-modal', $event)"
+    />
+
+    <MovieSection 
+      :title="titles[currentLang].top_rated"
+      endpoint="/movie/top_rated"
+      :genreMap="genreMap"
+      :currentLang="currentLang"
+      @notify="$emit('notify', $event)"
+      @open-modal="$emit('open-modal', $event)"
+    />
+
+    <!-- 무한스크롤 장르 섹션들 -->
+    <MovieSection 
+      v-for="section in genreSections"
+      :key="section.id"
+      :title="section.name"
+      :endpoint="section.endpoint"
+      :genreMap="genreMap"
+      :currentLang="currentLang"
+      @notify="$emit('notify', $event)"
+      @open-modal="$emit('open-modal', $event)"
+    />
+  </article>
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-    import MovieSection from './MovieSection.vue'
-    import { useGenres } from '../composables/useGenres'
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
+import MovieSection from './MovieSection.vue'
+import { useGenres } from '../composables/useGenres'
 
-    const loadedGenreIndex = ref(0)
-    const genreSections = ref([])
-    const props = defineProps({
-        keyword: String,
-        genreMap: Object,
-    })
+const props = defineProps({
+  keyword: String,
+  genreMap: Object,
+})
 
-    // 한국어 장르
-    const { genreListKo } = useGenres()
+const { currentLang, genreListKo, genresEn } = useGenres()
 
-    const loadNextGenre = () => {
-  // 🔥 props.genreList → genreListKo 로 변경
-  if (loadedGenreIndex.value >= genreListKo.value.length) return
-  
-  const genre = genreListKo.value[loadedGenreIndex.value]
+const loadedGenreIndex = ref(0)
+const genreSections = ref([])
+
+const titles = {
+  ko: {
+    popular: "인기 영화",
+    now_playing: "현재 상영 중",
+    upcoming: "상영 예정",
+    top_rated: "평점 높은 영화",
+  },
+  en: {
+    popular: "Popular Movies",
+    now_playing: "Now Playing",
+    upcoming: "Upcoming Movies",
+    top_rated: "Top Rated Movies",
+  }
+}
+
+const genreListActive = computed(() =>
+  currentLang.value === 'en'
+    ? (genresEn.value || [])
+    : genreListKo.value
+)
+
+const loadNextGenre = () => {
+  if (loadedGenreIndex.value >= genreListActive.value.length) return
+
+  const genre = genreListActive.value[loadedGenreIndex.value]
 
   genreSections.value.push({
     id: genre.id,
-    name: genre.name,
+    name: genre.name, // ← en/ko 자동반영!
     endpoint: `/discover/movie?with_genres=${genre.id}`,
   })
 
   loadedGenreIndex.value++
 }
 
-    const initMovieSections = () => {
+const initMovieSections = () => {
   genreSections.value = []
   loadedGenreIndex.value = 0
   loadNextGenre()
 }
 
-    const handleScroll = () => {
+const handleScroll = () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement
   if (scrollTop + clientHeight >= scrollHeight - 100) {
     loadNextGenre()
   }
 }
 
-    onMounted(() => {
+onMounted(() => {
   initMovieSections()
   window.addEventListener('scroll', handleScroll)
 })
@@ -95,10 +126,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
+watch(currentLang, () => {
+  initMovieSections()
+})
+
 watch(() => props.keyword, (newVal) => {
-  if (newVal === '') {
-    initMovieSections()
-  }
+  if (newVal === '') initMovieSections()
 })
 </script>
 

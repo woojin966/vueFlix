@@ -3,10 +3,12 @@
     <Header 
       ref="headerRef" 
       @update:keyword="keyword = $event"  
+      @clear-votes="resetAllVotes"
       v-model:keyword="keyword">
     </Header>
     <MainBanner 
       :active="keyword !== ''"
+      :currentLang="currentLang"
       @update:keyword="keyword = $event"
       ref="bannerRef"  
     ></MainBanner>
@@ -20,6 +22,7 @@
       :keyword="keyword" 
       :genreMap="genresMapActive"
       :genreList="genres"
+      :currentLang="currentLang"
       @notify="handleNotify"
       @open-modal="handleOpenModal"  
     >
@@ -29,6 +32,7 @@
       v-if="showModal"
       :movie="selectedMovie"
       :genres="genresMapActive"
+      
       @close="handleCloseModal"
       @notify="handleNotify"
     />
@@ -69,6 +73,9 @@ import { useGenres } from './composables/useGenres'
     selectedMovie.value = null
     document.body.style.overflow = '' 
   }
+  const resetAllVotes = () => {
+
+}
 </script>
 
 <style scoped>
