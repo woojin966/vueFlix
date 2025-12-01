@@ -76,10 +76,10 @@
                     <span>{{ t('footer_bottom.ceo') }}</span>
                 </p>
                 <p class="mini n">
-                    <span>{{ t('footer_bottom.email') }}</span>
+                    <span v-html="t('footer_bottom.email')"></span>
                 </p>
                 <p class="mini n">
-                    <span>{{ t('footer_bottom.address') }}</span>
+                    <span v-html="t('footer_bottom.address')"></span>
                 </p>
                 <p class="mini n">
                     <span>{{ t('footer_bottom.register_number') }}</span>
