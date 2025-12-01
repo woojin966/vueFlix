@@ -37,22 +37,22 @@ It includes:
 ## 📸 Screenshots
 
 ### 🌐 English UI  
-![VueFlix English UI](public/vueflix_en.png)
+![VueFlix English UI](vueFlix/public/vueflix_en.png)
 
 ### 🇰🇷 Korean UI  
-![VueFlix Korean UI](public/vueflix_ko.png)
+![VueFlix Korean UI](vueFlix/public/vueflix_ko.png)
 
 ### 🖥 Full Desktop Screen  
-![VueFlix Full PC](public/vueflix_full_pc.png)
+![VueFlix Full PC](vueFlix/public/vueflix_full_pc.png)
 
 ### 📱 Mobile Screen  
-<img src="public/vueflix_full_mo.png" width="320" />
+<img src="vueFlix/public/vueflix_full_mo.png" width="320" />
 
 ### 🔔 Notification (Alarm)  
-![VueFlix Alarm](public/vueflix_alarm.png)
+![VueFlix Alarm](vueFlix/public/vueflix_alarm.png)
 
 ### 🎞 Movie Modal  
-![VueFlix Modal](public/vuflix_modal.png)
+![VueFlix Modal](vueFlix/public/vuflix_modal.png)
 
 ---
 
