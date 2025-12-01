@@ -136,7 +136,7 @@
     }
   }
   :deep(.swiper-pagination){
-    flex-direction: column; display: flex; gap: 4px; bottom: unset; top: 0; left: 16%;
+    flex-direction: column; display: flex; gap: 4px; bottom: unset; top: 0; left: unset; width: max-content; right: 440px;
     .swiper-pagination-bullet{
         width: 4px; height: 28px; border-radius: 0; background-color: rgba(255,255,255,.8); margin: 0;
         &.swiper-pagination-bullet-active{
@@ -147,7 +147,7 @@
   @media all and (max-width: 1024px){
     padding-bottom: 28px;
     :deep(.swiper-pagination){
-        top: unset; bottom: 0; flex-direction: row; left: unset; width: 100%; justify-content: center;
+        top: unset; bottom: 0; right: unset; flex-direction: row; left: unset; width: 100%; height: max-content; justify-content: center;
         .swiper-pagination-bullet{
             width: 28px; height: 4px;
         }

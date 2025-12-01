@@ -1,33 +1,30 @@
 <template>
   <section class="hero_banner" :class="bannerClass">
-    
-    <!-- 배경 -->
     <div 
       class="hero_bg"
       :style="{ backgroundImage: activeBackdrop }"
     ></div>
-
-    <!-- Hero 텍스트 + 검색창 -->
     <div class="hero_text_box">
       <h1 class="hero_title b">VUEFLIX</h1>
 
       <p class="hero_subtitle big b">
         {{ uiText.subtitle }}
       </p>
-
       <SearchBar 
         @update:keyword="emit('update:keyword', $event)" 
         ref="searchBarRef" 
       />
     </div>
-
-    <!-- 슬라이더 -->
     <div class="hero-slider">
       <Swiper
         v-if="popularMovies.length"
         :modules="[Autoplay, Pagination]"
         :loop="true"
         :pagination="{ clickable: true }"
+        :autoplay="{
+          delay: 4000,
+          disableOnInteraction: false
+        }"
         :slides-per-view="1"
         :space-between="0"
         class="hero-swiper"
@@ -45,7 +42,6 @@
         </SwiperSlide>
       </Swiper>
     </div>
-
   </section>
 </template>
 
@@ -73,7 +69,6 @@ const activeSlideIndex = ref(0)
 const posterUrlForBanner = (path) =>
   `https://image.tmdb.org/t/p/w500${path}`
 
-// ⭐ UI 텍스트 국제화
 const uiText = computed(() =>
   currentLang.value === 'en'
     ? {
@@ -86,7 +81,6 @@ const uiText = computed(() =>
       }
 )
 
-// ⭐ 현재 슬라이드의 배경 이미지
 const activeBackdrop = computed(() => {
   const movie = popularMovies.value[activeSlideIndex.value]
   if (!movie?.backdrop_path) return ''
@@ -97,12 +91,10 @@ const onSlideChange = (swiper) => {
   activeSlideIndex.value = swiper.realIndex
 }
 
-// ⭐ TMDB 언어 코드 변환
 const langCode = computed(() =>
   currentLang.value === 'en' ? 'en-US' : 'ko-KR'
 )
 
-// ⭐ 인기영화 로딩
 const fetchPopular = async () => {
   const res = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {

@@ -4,6 +4,7 @@
     .footer_top{
         ul{
             display: flex; align-items: center;
+            a{cursor: not-allowed;}
             &.sns_box{
                 gap: 8px;
                 .sns_btn{font-size: 20px; color: #fff;}
@@ -15,6 +16,9 @@
                     padding: 8px 0;
                     &:hover{text-decoration: underline;}
                 }
+                @media all and (max-width: 480px){
+                    li{width: 50%;}
+                }
             }
         }
     }
@@ -22,6 +26,10 @@
         .servicecode_btn{padding: 8px 12px; border: 1px solid $gray; color: $gray; text-align: center;}
         .infomation_box{
             margin-top: 12px;
+            p{display: flex; align-items: center; gap: 8px;}
+            @media all and (max-width: 480px){
+                p{flex-wrap: wrap; gap: 0;}
+            }
         }
     }
     @media all and (max-width: 1280px){padding: 20px 40px;}
