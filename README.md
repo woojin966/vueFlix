@@ -1,7 +1,7 @@
 # 🎬 VueFlix — Vue.js Movie Browsing App  
 *A Netflix-Inspired Movie Discovery App built with Vue 3 + TMDB API*
 
-![VueFlix Banner](public/vueflix_en.png)
+![VueFlix Banner](.public/vueflix_en.png)
 
 <h1 align="center">🎬 VueFlix — Vue.js Movie Browsing App</h1>
 <p align="center">
