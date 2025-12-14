@@ -76,23 +76,15 @@ import { i18n } from '@/i18n/index.js'
 import { useVotes } from '../composables/useVotes'
 
 const { resetVotes } = useVotes()
-
-// 🔥 i18n 글로벌 사용
 const { t } = useI18n({ useScope: 'global' })
-
-// 🔥 부모(MainBanner)에서 inject
 const bannerRef = inject('bannerRef')
-
-// 🔥 emit
 const emit = defineEmits(['update:keyword', 'clear-votes'])
-
-// 🔥 영화(API) 언어
 const { currentLang, setLang } = useGenres()
 
-// ⭐ 언어 전환 — 영화언어 + UI언어 둘 다 적용
+
 function setEnglish() {
-  setLang('en')                      // TMDB 영화 데이터 언어
-  i18n.global.locale.value = 'en'    // UI 텍스트 언어
+  setLang('en')                     
+  i18n.global.locale.value = 'en'    
 }
 
 function setKorean() {
@@ -100,7 +92,6 @@ function setKorean() {
   i18n.global.locale.value = 'ko'
 }
 
-// 🔥 알림 기능
 const STORAGE_KEY = 'vueflix-notifications'
 const notifications = ref([])
 const showAlarm = ref(false)
@@ -111,7 +102,6 @@ const toggleAlarm = () => {
 }
 
 const addNotification = (notice) => {
-  // notice는 { icon, messageKey } 형태로 전달됨
   notifications.value.unshift(notice)
   showAlarm.value = true
   saveToStorage()
@@ -122,11 +112,9 @@ const saveToStorage = () => {
 }
 
 const clearNotifications = () => {
-  // 알림 제거
   notifications.value = []
   localStorage.removeItem(STORAGE_KEY)
 
-  // 👍 좋아요/싫어요 전체 초기화
   resetVotes()
 }
 
@@ -137,17 +125,14 @@ onMounted(() => {
   }
 })
 
-// 🔥 외부에서 addNotification 호출 가능하도록 expose
 defineExpose({ addNotification })
 
-// 🔥 프로필 박스
 const showProfile = ref(false)
 const toggleProfile = () => {
   showProfile.value = !showProfile.value
   showAlarm.value = false
 }
 
-// 🔥 검색 닫기
 const showSearch = ref(false)
 const searchBarRef = ref(null)
 
@@ -162,8 +147,9 @@ const closeSearch = () => {
   emit('update:keyword', '')
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-</script>
 
+console.log('Header mounted locale:', i18n.global.locale.value)
+</script>
 
 <style scoped lang="scss">
 @import '../assets/header.scss';

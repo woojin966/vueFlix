@@ -1,8 +1,11 @@
 import { ref, computed } from "vue";
+import { useI18n } from 'vue-i18n'
+import { i18n } from '@/i18n/index.js'
 import { getGenres } from "../api/tmdb";
 import { genreMap as genreMapKo, genreList as genreListKo } from "../data/genres";
 
-const currentLang = ref('ko')  // 'ko' or 'en'
+//const currentLang = ref('ko')  // 'ko' or 'en'
+const currentLang = ref(i18n.global.locale.value)
 
 const langCode = computed(() =>
   currentLang.value === 'en' ? 'en-US' : 'ko-KR'

@@ -1,5 +1,10 @@
 import { createI18n } from 'vue-i18n'
 
+const getDefaultLocale = () => {
+  const lang = navigator.language || navigator.userLanguage
+  return lang.startsWith('ko') ? 'ko' : 'en'
+}
+
 const messages = {
   ko: {
     search_placeholder: "제목으로 검색",
@@ -91,7 +96,9 @@ const messages = {
 export const i18n = createI18n({
   legacy: false,
   globalInjection: true,
-  locale: 'ko',
+  locale: getDefaultLocale(),
   fallbackLocale: 'en',
   messages
 })
+
+console.log('i18n locale on start:', i18n.global.locale.value)
