@@ -116,7 +116,7 @@ dl,
 li {
   position: relative;
   display: block;
-  /*overscroll-behavior: contain;*/
+}
 ol,
 ul {
   list-style: none;
